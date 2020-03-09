@@ -1,6 +1,13 @@
 # Pain Recognition with EEG
 In this project, we are analyzing 24 channels dry EEG data coming from the Shrinner Hospital in two patient population: Healthy and participant with MSK.
 
+## Code Structure
+- .experiments is hidden folder where old experiments code is stored
+- utils is where utility function (like plotting or reordering) are stored
+- result is where we keep some results we don't know where to put yet
+- at the root level we have the relevant experiments
+
+
 ## Analysis Flow
 In this folder there are at the time of writing about 6 experiments. The one that matters are the experiment 5,6 and 3,4 in that order. Merging these experiments into two would be a great idea and is set as a new issue. Here is how to run the experiment:
 0) Make sure you have the cleaned data sitting in your computer.
