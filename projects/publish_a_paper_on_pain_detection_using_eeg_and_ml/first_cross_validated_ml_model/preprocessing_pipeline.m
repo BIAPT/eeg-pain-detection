@@ -124,5 +124,3 @@ for id = 3:length(directories)
     end
   
 end
-
-
