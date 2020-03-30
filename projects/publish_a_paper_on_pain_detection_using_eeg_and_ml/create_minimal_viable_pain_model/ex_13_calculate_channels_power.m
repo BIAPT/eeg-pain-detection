@@ -13,7 +13,7 @@ header = ["id", "type", "is_hot"];
 alpha_band = [8 13];
 
 rejected_participants = {
-    'HE014', 'ME019', ...
+    'HE014','HE007', 'ME019', ...
     'ME034','ME042', 'ME046', 'ME048', 'ME050', 'ME052', 'ME053', ...
     'ME056', 'ME059', 'ME065'
     };
@@ -51,10 +51,6 @@ end
 
 fprintf(file_id,"\n");
 fclose(file_id);
-
-
-
-
 
 %% Iterating over all the participants
 
@@ -97,8 +93,7 @@ for id = 3:length(directories)
     catch
         printf("Should remove participant %s", hot_pain_name);
         return;
-    end
-    
+    end    
 
     %% Calculate Features
     disp(folder.name);
