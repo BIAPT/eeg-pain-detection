@@ -1,5 +1,6 @@
-%% Yacine Mahdid March 28 
-% This script is addressing this task: https://github.com/BIAPT/eeg-pain-detection/issues/13
+%% Yacine Mahdid May 04 
+% This script is addressing this task:
+% https://github.com/BIAPT/eeg-pain-detection/issues/14
 
 %% Experiment Variable
 % Path 
@@ -14,7 +15,7 @@ alpha_band = [8 13];
 
 rejected_participants = {
     'HE014','HE007', 'ME019', ...
-    'ME034','ME042', 'ME046', 'ME048', 'ME050', 'ME052', 'ME053', ...
+    'ME034','ME040', 'ME042', 'ME046', 'ME048', 'ME050', 'ME052', 'ME053', ...
     'ME056', 'ME059', 'ME065'
     };
 
@@ -27,7 +28,7 @@ rejected_participants = {
 % data-leakage and too optimistic result.
 td = struct();
 td.window_size = 10; % in seconds
-td.step_size = td.window_size; % in seconds 
+td.step_size = 1; % in seconds 
 td.bandpass = [8 13]; % in Hz
 
 data = load(FULL_HEADSET_LOCATION);
