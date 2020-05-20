@@ -1,6 +1,10 @@
+from math import floor
+import numpy as np
+
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import LeaveOneGroupOut
 from sklearn.model_selection import permutation_test_score
+from sklearn.utils import resample
 
 
 def classify_loso(X, y, group, clf):
@@ -51,3 +55,41 @@ def permutation_test(X, y, group, clf, num_permutation=1000):
                                                                      n_permutations=num_permutation,
                                                                      verbose=num_permutation, n_jobs=-1)
     return accuracy, permutation_scores, p_value
+
+
+def bootstrap_interval(X, y, group, clf, num_resample=1000, p_value=0.05):
+    """Create a confidence interval for the classifier with the given p value
+
+        Args:
+            X (numpy matrix): The feature matrix with which we want to train on classifier on
+            y (numpy vector): The label for each row of data point
+            group (numpy vector): The group id for each row in the data (correspond to the participant ids)
+            clf (sklearn classifier): The classifier that we which to train and validate with bootstrap interval
+            num_resample (int): The number of resample we want to do to create our distribution
+            p_value (float): The p values for the upper and lower bound
+
+        Returns:
+            acc_distribution (float vector): the distribution of all the accuracies
+            acc_interval (float vector): a lower and upper interval on the accuracies corresponding to the p value
+    """
+
+    acc_distribution = []
+    for sample_id in range(num_resample):
+        print("Bootstrap sample #" + str(sample_id))
+
+        # Get the sampled with replacement dataset
+        sample_X, sample_y, sample_group = resample(X, y, group)
+
+        # Classify and get the results
+        accuracies = classify_loso(sample_X, sample_y, sample_group, clf)
+        acc_distribution.append(np.mean(accuracies))
+
+    # Sort the results
+    acc_distribution.sort()
+
+    # Set the confidence interval at the right index
+    lower_index = floor(num_resample * (p_value / 2))
+    upper_index = floor(num_resample * (1 - (p_value / 2)))
+    acc_interval = acc_distribution[lower_index], acc_distribution[upper_index]
+
+    return acc_distribution, acc_interval
