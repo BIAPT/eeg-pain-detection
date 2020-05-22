@@ -6,6 +6,17 @@ from sklearn.model_selection import LeaveOneGroupOut
 from sklearn.model_selection import permutation_test_score
 from sklearn.utils import resample
 
+from sklearn.pipeline import Pipeline
+from sklearn.base import BaseEstimator
+from sklearn.model_selection import GridSearchCV
+
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.svm import SVC
+
+from sklearn.preprocessing import StandardScaler
+from sklearn.impute import SimpleImputer
+
 
 def classify_loso(X, y, group, clf):
     """ Main classification function to train and test a ml model with Leave one subject out
@@ -32,6 +43,37 @@ def classify_loso(X, y, group, clf):
         accuracy = accuracy_score(y_test, y_hat)
         accuracies.append(accuracy)
     return accuracies
+
+
+def classify_loso_model_selection(X, y, group, gs):
+    """ This do classification using LOSO while also doing model selection using LOSO
+
+        Args:
+            X (numpy matrix): this is the feature matrix with row being a data point
+            y (numpy vector): this is the label vector with row belonging to a data point
+            group (numpy vector): this is the group vector (which is a the participant id)
+            gs (sklearn GridSearchCV): this is a gridsearch object that will output the best model
+
+        Returns:
+            accuracies (list): the accuracy at for each leave one out participant
+    """
+    logo = LeaveOneGroupOut()
+
+    accuracies = []
+    best_params = []
+    for train_index, test_index in logo.split(X, y, group):
+        X_train, X_test = X[train_index], X[test_index]
+        y_train, y_test = y[train_index], y[test_index]
+        group_train, group_test = group[train_index], group[test_index]
+
+        gs.fit(X_train, y_train, groups=group_train)
+        y_hat = gs.predict(X_test)
+
+        accuracy = accuracy_score(y_test, y_hat)
+
+        accuracies.append(accuracy)
+        best_params.append(gs.best_params_)
+    return accuracies, best_params
 
 
 def permutation_test(X, y, group, clf, num_permutation=1000):
@@ -93,3 +135,41 @@ def bootstrap_interval(X, y, group, clf, num_resample=1000, p_value=0.05):
     acc_interval = acc_distribution[lower_index], acc_distribution[upper_index]
 
     return acc_distribution, acc_interval
+
+
+def create_gridsearch_pipeline():
+    """ Helper function to create a gridsearch with a search space containing classifiers
+
+        Returns:
+            gs (sklearn gridsearch): this is the grid search objec wrapping the pipeline
+    """
+
+    # Create LOSO Grid Search to search amongst many classifier
+    class DummyEstimator(BaseEstimator):
+        """Dummy estimator to allow gridsearch to test many estimator"""
+
+        def fit(self): pass
+
+        def score(self): pass
+
+    # Create a pipeline
+    pipe = Pipeline([
+        ('imputer', SimpleImputer(missing_values=np.nan, strategy='mean')),
+        ('scaler', StandardScaler()),
+        ('clf', DummyEstimator())])  # Placeholder Estimator
+
+    # Candidate learning algorithms and their hyperparameters
+    search_space = [{'clf': [LogisticRegression()],  # Actual Estimator
+                     'clf__penalty': ['l1', 'l2'],
+                     'clf__solver': ['liblinear'],
+                     'clf__C': np.logspace(0, 4, 10)},
+
+                    {'clf': [SVC()],
+                     'clf__kernel': ['linear'],
+                     'clf__C': [1, 10, 100, 1000]},
+
+                    {'clf': [DecisionTreeClassifier()],  # Actual Estimator
+                     'clf__criterion': ['gini', 'entropy']}]
+
+    gs = GridSearchCV(pipe, search_space, cv=LeaveOneGroupOut())
+    return gs
