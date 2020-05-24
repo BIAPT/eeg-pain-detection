@@ -7,8 +7,15 @@ The first step is to send this out to a big conference in ML, it's a 5-6 page wr
 ### Model to use (classification of pain and no-pain)
 - Linear SVM
 - Linear Regression
-- LDA
-- K-NN (very very basic model)
 - Decision Trees
 
 All of them are available on Sklearn, we want to use a white-box model so that we can interpret what the weights output are.
+
+### Minimal Features To Use
+- wPLI at Delta, Theta, Alpha, Beta
+- Power at Delta, Theta, Alpha, Beta
+- Peak frequency at (6-14Hz)
+
+### Feature to add later on
+- AEC
+- Graph Theory feature (Degree, Clustering Coefficient, small worldness, efficiency)
