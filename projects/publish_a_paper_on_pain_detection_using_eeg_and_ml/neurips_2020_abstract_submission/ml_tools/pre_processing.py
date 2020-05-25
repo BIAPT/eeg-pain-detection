@@ -30,11 +30,12 @@ def pre_process(input_filename, population_id="BOTH"):
         df = df[df.type == POPULATION_ID[population_id]]
 
     # We had this weird column appearing so we will remove it
-    df = df.drop(['Unnamed: 22'], axis=1)
+    if 'Unnamed: 79' in df.columns:
+        df = df.drop(['Unnamed: 79'], axis=1)
 
     # Extract the right information for ml part
     X = df.drop(['id', 'type', 'is_hot'], axis=1).to_numpy()
     y = df.is_hot.to_numpy()
     group = df.id.to_numpy()
 
-    return X, y, group
+    return X, y, group, df

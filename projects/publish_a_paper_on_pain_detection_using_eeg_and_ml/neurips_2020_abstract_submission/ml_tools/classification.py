@@ -61,10 +61,13 @@ def classify_loso_model_selection(X, y, group, gs):
 
     accuracies = []
     best_params = []
+    num_folds = logo.get_n_splits(X, y, group) # keep track of how many folds left
     for train_index, test_index in logo.split(X, y, group):
         X_train, X_test = X[train_index], X[test_index]
         y_train, y_test = y[train_index], y[test_index]
         group_train, group_test = group[train_index], group[test_index]
+
+        print(f"Number of folds left: {num_folds}")
 
         gs.fit(X_train, y_train, groups=group_train)
         y_hat = gs.predict(X_test)
@@ -73,6 +76,8 @@ def classify_loso_model_selection(X, y, group, gs):
 
         accuracies.append(accuracy)
         best_params.append(gs.best_params_)
+
+        num_folds = num_folds - 1
     return accuracies, best_params
 
 
