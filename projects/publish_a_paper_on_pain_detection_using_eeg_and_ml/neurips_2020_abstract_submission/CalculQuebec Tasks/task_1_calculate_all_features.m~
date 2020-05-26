@@ -8,7 +8,6 @@
 p = parpool('local');
 disp(strcat("Number of worker : ", p.NumWorkers))
 
-return
 %% Experiment Variable
 % Path 
 IN_DIR = "/lustre03/project/6010672/yacine08/eeg_pain_data/";
