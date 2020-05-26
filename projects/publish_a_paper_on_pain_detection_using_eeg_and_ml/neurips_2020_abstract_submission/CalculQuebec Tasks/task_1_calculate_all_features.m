@@ -11,6 +11,8 @@ NUM_CORE = 10;
 addpath(genpath(NEUROALGO_PATH));
 
 % This needs to match the slurm file
+% Before setting up the parpool we need to disable this
+distcomp.feature( 'LocalUseMpiexec', false )
 parpool(NUM_CORE)
 
 %% Experiment Variable
