@@ -5,7 +5,13 @@
 
 %% BELUGA Setup
 NEUROALGO_PATH = "/lustre03/project/6010672/yacine08/NeuroAlgo";
+NUM_CORE = 10;
+
+% Add NA library to our path so that we can use it
 addpath(genpath(NEUROALGO_PATH));
+
+% This needs to match the slurm file
+parpool(NUM_CORE)
 
 %% Experiment Variable
 % Path 
