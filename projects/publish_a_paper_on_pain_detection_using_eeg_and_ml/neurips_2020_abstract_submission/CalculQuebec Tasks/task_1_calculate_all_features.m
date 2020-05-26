@@ -2,6 +2,11 @@
 % We basically needs to calculate Power, wPLI and peak frequency
 % the first two need to be calculated at delta, theta, alpha, beta
 
+
+%% BELUGA Setup
+NEUROALGO_PATH = "/home/yacine/Documents/BIAPT/NeuroAlgo";
+addpath(genpath(NEUROALGO_PATH));
+
 %% Experiment Variable
 % Path 
 IN_DIR = "/lustre03/project/6010672/yacine08/eeg_pain_data/";
