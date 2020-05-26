@@ -4,8 +4,8 @@
 #SBATCH --time=0-3:00         # adjust this to match the walltime of your job (in hours)
 #SBATCH --nodes=1      
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=10      # adjust this if you are using parallel commands
-#SBATCH --mem=4             # adjust this according to the memory requirement per node you need
+#SBATCH --cpus-per-task=12      # adjust this if you are using parallel commands
+#SBATCH --mem=4000            # adjust this according to the memory requirement per node you need (this is MegaByte)
 #SBATCH --mail-user=yacine.mahdid@mail.mcgill.ca # adjust this to match your email address
 #SBATCH --mail-type=ALL
 
