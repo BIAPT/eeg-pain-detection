@@ -40,14 +40,14 @@ bandpass_freqs = {[0.5 4], [4 8], [8 14], [14 32]};
 
 % This will be the same throughout the features
 WIN_SIZE = 10;
-STEP_SIZE = 10;
+STEP_SIZE = 0.1;
 
 % Spectrogram Params
 time_bandwith_product = 2;
 number_tapers = 3;
 
 % wPLI Params
-number_surrogate = 10; % Number of surrogate wPLI to create
+number_surrogate = 20; % Number of surrogate wPLI to create
 p_value = 0.05; % the p value to make our test on
 
 data = load(FULL_HEADSET_LOCATION);
