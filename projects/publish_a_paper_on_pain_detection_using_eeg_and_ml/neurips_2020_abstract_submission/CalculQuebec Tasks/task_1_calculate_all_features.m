@@ -102,15 +102,14 @@ parfor id = 3:length(directories)
             [pad_powers] = calculate_power(recording, WIN_SIZE, STEP_SIZE, bandpass, max_location);
             
             % Peak Frequency
-            %result_sp = na_spectral_power(recording, WIN_SIZE, time_bandwith_product, number_tapers, bandpass, STEP_SIZE);
-            %peak_frequency = result_sp.data.peak_frequency';
+            result_sp = na_spectral_power(recording, WIN_SIZE, time_bandwith_product, number_tapers, bandpass, STEP_SIZE);
+            peak_frequency = result_sp.data.peak_frequency';
             
             % wPLI
-            %result_wpli = na_wpli(recording, bandpass, WIN_SIZE, STEP_SIZE, number_surrogate, p_value);
-            %[pad_avg_wpli] = calculate_wpli(recording, bandpass, WIN_SIZE, STEP_SIZE, number_surrogate, p_value, max_location);
+            result_wpli = na_wpli(recording, bandpass, WIN_SIZE, STEP_SIZE, number_surrogate, p_value);
+            [pad_avg_wpli] = calculate_wpli(recording, bandpass, WIN_SIZE, STEP_SIZE, number_surrogate, p_value, max_location);
 
-            features = horzcat(features, pad_powers);
-            %features = horzcat(features, pad_powers, peak_frequency, pad_avg_wpli);
+            features = horzcat(features, pad_powers, peak_frequency, pad_avg_wpli);
         end
         
          %% Write the features to file
@@ -135,20 +134,16 @@ for id = 3:length(directories)
     end
     
     disp(folder.name);
-    
     out_file_participant = sprintf(OUT_FILE,folder.name);
-    
     participant_table = readtable(out_file_participant);
     
-    features = table2array(participant_table);
-    [num_window, ~] = size(features);
+    table_data = table2array(participant_table);
+    [num_window, ~] = size(table_data);
     for w = 1:num_window
-        row = features(w,:);
-        dlmwrite(out_file_participant, [p_id, is_healthy, label, row], '-append');
+        row = table_data(w,:);
+        dlmwrite(OUT_FILE_ALL, [row], '-append');
     end
-
 end
-writetable(final_table, OUT_FILE_ALL)
 
 function write_header(OUT_FILE, header, bandpass_names, max_location)
     %% Create data set
