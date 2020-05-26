@@ -2,13 +2,6 @@
 % We basically needs to calculate Power, wPLI and peak frequency
 % the first two need to be calculated at delta, theta, alpha, beta
 
-
-%% Setup for BELUGA
-% Start the parallel pool
-p = parpool('local');
-disp(strcat("Number of worker : ", p.NumWorkers))
-
-return
 %% Experiment Variable
 % Path 
 IN_DIR = "/lustre03/project/6010672/yacine08/eeg_pain_data/";
