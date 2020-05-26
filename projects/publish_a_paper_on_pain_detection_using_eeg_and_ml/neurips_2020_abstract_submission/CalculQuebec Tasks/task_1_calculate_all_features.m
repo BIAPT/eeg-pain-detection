@@ -1,17 +1,23 @@
-%% Yacine Mahdid May 24 
-% This script is addressing this task: 
-% https://github.com/BIAPT/eeg-pain-detection/issues/21
-% https://github.com/BIAPT/eeg-pain-detection/issues/26
-% https://github.com/BIAPT/eeg-pain-detection/issues/32
-%
+%% Yacine Mahdid May 26
 % We basically needs to calculate Power, wPLI and peak frequency
 % the first two need to be calculated at delta, theta, alpha, beta
 
+
+%% Setup for BELUGA
+% Create a "local" cluster object
+local_cluster = parcluster('local');
+
+% Modify the JobStorageLocation to $SLURM_TMPDIR
+local_cluster.JobStorageLocation = getenv('SLURM_TMPDIR');
+
+% Start the parallel pool
+parpool(local_cluster);
+
 %% Experiment Variable
 % Path 
-IN_DIR = "/media/yacine/Data/pain_and_eeg/all_data/";
-FULL_HEADSET_LOCATION = "/home/yacine/Documents/BIAPT/eeg-pain-detection/projects/.data/full_headset_location.mat";
-OUT_FILE = "/media/yacine/Data/pain_and_eeg/machine_learning_data/features_%s.csv";
+IN_DIR = "/lustre03/project/6010672/yacine08/eeg_pain_data/";
+FULL_HEADSET_LOCATION = "/lustre03/project/6010672/yacine08/eeg-pain-detection/projects/.data/full_headset_location.mat";
+OUT_FILE = "/lustre03/project/6010672/yacine08/eeg_pain_result/features_%s.csv";
 
 % Global Experiment Variable
 rejected_participants = {
@@ -123,7 +129,7 @@ parfor id = 3:length(directories)
 end
 
 % Concatenating all the files into a big table without parfor
-OUT_FILE_ALL = "/media/yacine/Data/pain_and_eeg/machine_learning_data/features_all.csv";
+OUT_FILE_ALL = sprint(OUT_FILE, "all");
 write_header(OUT_FILE_ALL, header, bandpass_names, max_location)
 for id = 3:length(directories)
     folder = directories(id);
