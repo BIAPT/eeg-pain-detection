@@ -131,7 +131,7 @@ parfor id = 3:length(directories)
 end
 
 % Concatenating all the files into a big table without parfor
-OUT_FILE_ALL = sprint(OUT_FILE, "all");
+OUT_FILE_ALL = sprintf(OUT_FILE, "all");
 write_header(OUT_FILE_ALL, header, bandpass_names, max_location)
 for id = 3:length(directories)
     folder = directories(id);
