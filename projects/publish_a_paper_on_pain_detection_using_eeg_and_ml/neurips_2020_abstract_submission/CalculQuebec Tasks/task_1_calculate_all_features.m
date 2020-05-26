@@ -10,10 +10,16 @@ NUM_CORE = 10;
 % Add NA library to our path so that we can use it
 addpath(genpath(NEUROALGO_PATH));
 
-% This needs to match the slurm file
-% Before setting up the parpool we need to disable this
+% Disable this feature
 distcomp.feature( 'LocalUseMpiexec', false )
-parpool(NUM_CORE)
+% Create a "local" cluster object
+local_cluster = parcluster('local')
+
+% Modify the JobStorageLocation to $SLURM_TMPDIR
+local_cluster.JobStorageLocation = getenv('SLURM_TMPDIR')
+
+% Start the parallel pool
+parpool(local_cluster)
 
 %% Experiment Variable
 % Path 

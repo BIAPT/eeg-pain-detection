@@ -3,10 +3,23 @@
 % the first two need to be calculated at delta, theta, alpha, beta
 
 
-%% Setup for BELUGA
+%% BELUGA Setup
+NEUROALGO_PATH = "/lustre03/project/6010672/yacine08/NeuroAlgo";
+NUM_CORE = 10;
+
+% Add NA library to our path so that we can use it
+addpath(genpath(NEUROALGO_PATH));
+
+% Disable this feature
+distcomp.feature( 'LocalUseMpiexec', false )
+% Create a "local" cluster object
+local_cluster = parcluster('local')
+
+% Modify the JobStorageLocation to $SLURM_TMPDIR
+local_cluster.JobStorageLocation = getenv('SLURM_TMPDIR')
+
 % Start the parallel pool
-p = parpool('local');
-disp(strcat("Number of worker : ", p.NumWorkers))
+parpool(local_cluster)
 
 %% Experiment Variable
 % Path 
@@ -124,7 +137,7 @@ parfor id = 3:length(directories)
 end
 
 % Concatenating all the files into a big table without parfor
-OUT_FILE_ALL = sprint(OUT_FILE, "all");
+OUT_FILE_ALL = sprintf(OUT_FILE, "all");
 write_header(OUT_FILE_ALL, header, bandpass_names, max_location)
 for id = 3:length(directories)
     folder = directories(id);
