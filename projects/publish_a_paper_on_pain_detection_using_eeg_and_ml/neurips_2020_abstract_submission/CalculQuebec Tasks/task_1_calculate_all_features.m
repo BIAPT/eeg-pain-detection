@@ -4,7 +4,7 @@
 
 
 %% BELUGA Setup
-NEUROALGO_PATH = "/home/yacine/Documents/BIAPT/NeuroAlgo";
+NEUROALGO_PATH = "/lustre03/project/6010672/yacine08/NeuroAlgo";
 addpath(genpath(NEUROALGO_PATH));
 
 %% Experiment Variable
