@@ -11,7 +11,7 @@
 % Path 
 IN_DIR = "/media/yacine/Data/pain_and_eeg/all_data/";
 FULL_HEADSET_LOCATION = "/home/yacine/Documents/BIAPT/eeg-pain-detection/projects/.data/full_headset_location.mat";
-OUT_FILE = "/media/yacine/Data/pain_and_eeg/machine_learning_data/features_litterature.csv";
+OUT_FILE = "/media/yacine/Data/pain_and_eeg/machine_learning_data/features_%s.csv";
 
 % Global Experiment Variable
 rejected_participants = {
@@ -21,7 +21,6 @@ rejected_participants = {
     };
 
 header = ["id", "type", "is_hot"];
-
 bandpass_names = {'delta','theta', 'alpha', 'beta'};
 bandpass_freqs = {[0.5 4], [4 8], [8 14], [14 32]};
 
@@ -29,43 +28,29 @@ bandpass_freqs = {[0.5 4], [4 8], [8 14], [14 32]};
 WIN_SIZE = 10;
 STEP_SIZE = 10;
 
+% Spectrogram Params
+time_bandwith_product = 2;
+number_tapers = 3;
+
+% wPLI Params
+number_surrogate = 10; % Number of surrogate wPLI to create
+p_value = 0.05; % the p value to make our test on
+
 data = load(FULL_HEADSET_LOCATION);
 max_location = data.max_location;
 
-%% Create data set
-% Overwrite the file
-delete(OUT_FILE);
-
-% Write header to the features file
-file_id = fopen(OUT_FILE,'w');
-for i = 1:length(header)
-    fprintf(file_id,'%s,', header(i));
-end
-
-% Write the rest of the header for the channel-wise power
-for b_i = 1:length(bandpass_names)
-    bandpass_name = bandpass_names{b_i};
-    
-    for c = 1:length(max_location)
-        channel_label = max_location(c).labels;
-        feature_label = sprintf("%s_%s_power",channel_label, bandpass_name);
-        fprintf(file_id,'%s,', lower(feature_label)); 
-    end    
-end
-
-
-fprintf(file_id,"\n");
-fclose(file_id);
-
 %% Iterating over all the participants
 
-directories = dir(IN_DIR);
-
 % Iterate over all directory since the first two are the '.' and '..' then
-% we start at index 3
-for id = 3:length(directories)
+% we start at index 3. 
+% We will be using parfor to take advantage of compute quebec beluga server
+directories = dir(IN_DIR);
+parfor id = 3:length(directories)
     folder = directories(id);
     disp(folder.name);
+    
+    out_file_participant = sprintf(OUT_FILE,folder.name);
+    write_header(out_file_participant, header, bandpass_names, max_location)
         
     % We skip participants that are problematic
     if(ismember(folder.name, rejected_participants))
@@ -97,7 +82,7 @@ for id = 3:length(directories)
         hot_pain_recording = load_set(hot_pain_name, participant_path);
     catch
         printf("Should remove participant %s", hot_pain_name);
-        return;
+        continue;
     end    
 
     %% Calculate Features
@@ -113,53 +98,102 @@ for id = 3:length(directories)
             name = bandpass_names{b_i};
             fprintf("Calculating Feature at %s\n",name);
 
+            % Power per channels
             [pad_powers] = calculate_power(recording, WIN_SIZE, STEP_SIZE, bandpass, max_location);
-            features = horzcat(features, pad_powers);
+            
+            % Peak Frequency
+            result_sp = na_spectral_power(recording, WIN_SIZE, time_bandwith_product, number_tapers, bandpass, STEP_SIZE);
+            peak_frequency = result_sp.data.peak_frequency';
+            
+            % wPLI
+            result_wpli = na_wpli(recording, bandpass, WIN_SIZE, STEP_SIZE, number_surrogate, p_value);
+            [pad_avg_wpli] = calculate_wpli(recording, bandpass, WIN_SIZE, STEP_SIZE, number_surrogate, p_value, max_location);
+
+            features = horzcat(features, pad_powers, peak_frequency, pad_avg_wpli);
         end
         
          %% Write the features to file
         [num_window, ~] = size(features);
         for w = 1:num_window
             row = features(w,:);
-            dlmwrite(OUT_FILE, [p_id, is_healthy, label, row], '-append');
+            dlmwrite(out_file_participant, [p_id, is_healthy, label, row], '-append');
         end
         
     end
-    
-    
-    %{
+end
 
+% Concatenating all the files into a big table without parfor
+OUT_FILE_ALL = "/media/yacine/Data/pain_and_eeg/machine_learning_data/features_all.csv";
+write_header(OUT_FILE_ALL, header, bandpass_names, max_location)
+for id = 3:length(directories)
+    folder = directories(id);
     
-    power_distribution_baseline = na_topographic_distribution(baseline_recording, ...
-        td.window_size, td.step_size, td.bandpass);
-    
-    baseline_location = power_distribution_baseline.metadata.channels_location;
-    baseline_power = power_distribution_baseline.data.power;
-    
-    
-    power_distribution_hot = na_topographic_distribution(hot_pain_recording, ...
-        td.window_size, td.step_size, td.bandpass);
-    
-    hot_location = power_distribution_hot.metadata.channels_location;
-    hot_power = power_distribution_hot.data.power;
-    
-    % If we want to add more feature put them over here %
-    
-    %% Write the features to file
-    [num_window, ~] = size(baseline_power);
-    for w_i = 1:num_window
-        p_power = pad_result(baseline_power(w_i,:), baseline_location, max_location);
-        dlmwrite(OUT_FILE, [p_id, is_healthy, 0, p_power], '-append');
+    % We skip participants that are problematic
+    if(ismember(folder.name, rejected_participants))
+        continue 
     end
-   
-    [num_window, ~] = size(hot_power);
-    for w_i = 1:num_window
-        p_power = pad_result(hot_power(w_i,:), hot_location, max_location);        
-        dlmwrite(OUT_FILE, [p_id, is_healthy, 1, p_power], '-append');     
-    end
-    %}
     
-  
+    disp(folder.name);
+    out_file_participant = sprintf(OUT_FILE,folder.name);
+    participant_table = readtable(out_file_participant);
+    
+    table_data = table2array(participant_table);
+    [num_window, ~] = size(table_data);
+    for w = 1:num_window
+        row = table_data(w,:);
+        dlmwrite(OUT_FILE_ALL, [row], '-append');
+    end
+end
+
+function write_header(OUT_FILE, header, bandpass_names, max_location)
+    %% Create data set
+    % Overwrite the file
+    
+    delete(OUT_FILE);
+
+    % Write header to the features file
+    file_id = fopen(OUT_FILE,'w');
+    for i = 1:length(header)
+        fprintf(file_id,'%s,', header(i));
+    end
+
+    % Write the rest of the header for the channel-wise power
+    for b_i = 1:length(bandpass_names)
+        bandpass_name = bandpass_names{b_i};
+
+        % Power Across Channels
+        for c = 1:length(max_location)
+            channel_label = max_location(c).labels;
+            feature_label = sprintf("%s_%s_power",channel_label, bandpass_name);
+            fprintf(file_id,'%s,', lower(feature_label)); 
+        end   
+
+        % Peak Frequency
+        feature_label = sprintf("peak_freq_%s",bandpass_name);
+        fprintf(file_id, '%s,',lower(feature_label));
+
+        % wPLI Across Channels
+        for c = 1:length(max_location)
+            channel_label = max_location(c).labels;
+            feature_label = sprintf("%s_%s_wpli",channel_label, bandpass_name);
+            fprintf(file_id,'%s,', lower(feature_label)); 
+        end     
+    end
+
+    fprintf(file_id,"\n");
+    fclose(file_id);
+end
+
+function [pad_avg_wpli] = calculate_wpli(recording, bandpass, win_size, step_size, number_surrogate, p_value, max_location)
+    result_wpli = na_wpli(recording, bandpass, win_size, step_size, number_surrogate, p_value);
+    location = result_wpli.metadata.channels_location;
+    avg_wpli = mean(result_wpli.data.wpli,3);
+    
+    [num_window,~] = size(avg_wpli);
+    pad_avg_wpli = zeros(num_window, length(max_location));
+    for w = 1:num_window
+       pad_avg_wpli(w,:) = pad_result(avg_wpli(w,:), location, max_location);
+    end
 end
 
 function [pad_powers] = calculate_power(recording, win_size, step_size, bandpass, max_location)
