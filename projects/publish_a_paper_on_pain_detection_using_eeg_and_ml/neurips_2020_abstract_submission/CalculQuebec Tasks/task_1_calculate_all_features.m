@@ -36,7 +36,7 @@ rejected_participants = {
 
 header = ["id", "type", "is_hot"];
 bandpass_names = {'delta','theta', 'alpha', 'beta'};
-bandpass_freqs = {[0.5 4], [4 8], [8 14], [14 32]};
+bandpass_freqs = {[1 4], [4 8], [8 13], [13 30]};
 
 % This will be the same throughout the features
 WIN_SIZE = 10;
