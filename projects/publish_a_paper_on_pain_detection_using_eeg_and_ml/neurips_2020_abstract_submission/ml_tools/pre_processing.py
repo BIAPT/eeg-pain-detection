@@ -32,6 +32,10 @@ def pre_process(input_filename, population_id="BOTH"):
     # We had this weird column appearing so we will remove it
     df.drop(df.filter(regex="Unnamed"), axis=1, inplace=True)
 
+    # Increment the id for the MSK so that we don't have the same id for
+    # both healthy and msk participant
+    df.loc[df['type'] == 0, ['id']] += 1000
+
     # Extract the right information for ml part
     X = df.drop(['id', 'is_hot'], axis=1).to_numpy()
     y = df.is_hot.to_numpy()
