@@ -176,5 +176,6 @@ def create_gridsearch_pipeline():
                     {'clf': [DecisionTreeClassifier()],  # Actual Estimator
                      'clf__criterion': ['gini', 'entropy']}]
 
-    gs = GridSearchCV(pipe, search_space, cv=LeaveOneGroupOut())
+    # We will try to use as many processor as possible for the gridsearch
+    gs = GridSearchCV(pipe, search_space, cv=LeaveOneGroupOut(), n_jobs=-1)
     return gs
