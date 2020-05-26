@@ -5,7 +5,7 @@
 
 %% BELUGA Setup
 NEUROALGO_PATH = "/lustre03/project/6010672/yacine08/NeuroAlgo";
-NUM_CORE = 10;
+NUM_CORE = 12;
 
 % Add NA library to our path so that we can use it
 addpath(genpath(NEUROALGO_PATH));
@@ -16,10 +16,10 @@ distcomp.feature( 'LocalUseMpiexec', false )
 local_cluster = parcluster('local')
 
 % Modify the JobStorageLocation to $SLURM_TMPDIR
-local_cluster.JobStorageLocation = getenv('SLURM_TMPDIR')
+pc.JobStorageLocation = strcat('/scratch/YourUsername/', getenv('SLURM_JOB_ID'))
 
 % Start the parallel pool
-parpool(local_cluster)
+parpool(local_cluster, NUM_CORE)
 
 %% Experiment Variable
 % Path 

@@ -10,8 +10,13 @@
 #SBATCH --mail-type=ALL
 
 # Choose a version of MATLAB by loading a module:
-export MATLABPATH=/lustre03/project/6010672/yacine08:$MATLABPATH
 module load matlab/2018a
+
+# Create temporary job info location
+mkdir -p /scratch/$USER/$SLURM_JOB_ID
 
 # Remove -singleCompThread below if you are using parallel commands:
 srun matlab -nodisplay -r "task_1_calculate_all_features"
+
+# Cleanup
+rm -rf /scratch/$USER/$SLURM_JOB_ID
