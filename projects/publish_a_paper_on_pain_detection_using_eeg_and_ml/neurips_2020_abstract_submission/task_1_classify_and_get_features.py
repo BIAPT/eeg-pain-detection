@@ -11,7 +11,7 @@ from ml_tools.classification import create_gridsearch_pipeline
 from ml_tools.pre_processing import pre_process
 
 # Global Experimental Variable
-input_filename = '/media/yacine/Data/pain_and_eeg/machine_learning_data/features_litterature.csv'
+input_filename = '/lustre03/project/6010672/yacine08/eeg_pain_result//features_all.csv'
 
 gs = create_gridsearch_pipeline()
 X, y, group, df = pre_process(input_filename)
