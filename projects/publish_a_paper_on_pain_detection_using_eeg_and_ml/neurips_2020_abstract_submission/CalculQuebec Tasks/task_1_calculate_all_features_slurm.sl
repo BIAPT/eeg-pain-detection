@@ -1,7 +1,7 @@
 #!/bin/bash -l
 #SBATCH --job-name=matlab_yacine08_job
 #SBATCH --account=def-sblain # adjust this to match the accounting group you are using to submit jobs
-#SBATCH --time=0-6:00         # adjust this to match the walltime of your job (in hours)
+#SBATCH --time=1:00:00        # adjust this to match the walltime of your job (in hours)
 #SBATCH --nodes=1      
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=40      # adjust this if you are using parallel commands
