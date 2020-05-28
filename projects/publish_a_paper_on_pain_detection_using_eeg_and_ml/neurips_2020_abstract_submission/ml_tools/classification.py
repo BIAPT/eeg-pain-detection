@@ -174,6 +174,7 @@ def create_gridsearch_pipeline():
     search_space = [{'clf': [LogisticRegression()],  # Actual Estimator
                      'clf__penalty': ['l1', 'l2'],
                      'clf__solver': ['saga'],
+                     'clf__max_iter': [1000],
                      'clf__C': np.logspace(0, 4, 10)},
 
                     {'clf': [SVC()],
