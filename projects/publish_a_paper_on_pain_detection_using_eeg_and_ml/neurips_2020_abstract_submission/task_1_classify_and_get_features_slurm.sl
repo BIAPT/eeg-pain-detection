@@ -17,4 +17,5 @@ pip install --no-index --upgrade pip
 pip install --no-index -r requirements.txt
 pip install -U scikit-learn
 pip install "dask[complete]"    # Install everything
+pip install dask-jobqueue
 python task_1_classify_and_get_features.py
