@@ -73,8 +73,8 @@ def classify_loso_model_selection(X, y, group, gs):
         print(f"Number of folds left: {num_folds}")
 
         # Here we use Dask to be able to train on all the core on a cluster
-        #with joblib.parallel_backend('dask'):
-        gs.fit(X_train, y_train, groups=group_train)
+        with joblib.parallel_backend('dask'):
+            gs.fit(X_train, y_train, groups=group_train)
 
         y_hat = gs.predict(X_test)
 
