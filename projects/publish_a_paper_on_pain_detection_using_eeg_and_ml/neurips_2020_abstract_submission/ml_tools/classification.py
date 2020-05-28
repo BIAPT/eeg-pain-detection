@@ -18,6 +18,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.impute import SimpleImputer
 
 import joblib
+from dask.distributed import Client, progress
 
 
 def classify_loso(X, y, group, clf):
@@ -59,6 +60,8 @@ def classify_loso_model_selection(X, y, group, gs):
         Returns:
             accuracies (list): the accuracy at for each leave one out participant
     """
+    client = Client()
+
     logo = LeaveOneGroupOut()
 
     accuracies = []
@@ -74,7 +77,7 @@ def classify_loso_model_selection(X, y, group, gs):
         # Here we use Dask to be able to train on all the core on a cluster
         with joblib.parallel_backend('dask'):
             gs.fit(X_train, y_train, groups=group_train)
-            
+
         y_hat = gs.predict(X_test)
 
         accuracy = accuracy_score(y_test, y_hat)
