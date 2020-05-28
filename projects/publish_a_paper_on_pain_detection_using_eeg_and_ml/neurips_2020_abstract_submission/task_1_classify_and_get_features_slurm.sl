@@ -15,5 +15,5 @@ module load scipy-stack
 virtualenv --no-download $SLURM_TMPDIR/env
 source $SLURM_TMPDIR/env/bin/activate
 pip install --no-index --upgrade pip
-pip install -U scikit-learn
+pip install -r requirements.txt
 python task_1_classify_and_get_features.py
