@@ -22,8 +22,6 @@ pc.JobStorageLocation = strcat('/scratch/YourUsername/', getenv('SLURM_JOB_ID'))
 parpool(local_cluster, NUM_CORE)
 
 local_cluster.NumWorkers
-
-return
 %% Experiment Variable
 % Path 
 IN_DIR = "/lustre03/project/6010672/yacine08/eeg_pain_data/";
