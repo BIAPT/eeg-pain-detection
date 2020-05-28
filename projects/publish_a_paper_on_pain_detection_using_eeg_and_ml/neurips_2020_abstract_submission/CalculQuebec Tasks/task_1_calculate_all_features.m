@@ -21,6 +21,9 @@ pc.JobStorageLocation = strcat('/scratch/YourUsername/', getenv('SLURM_JOB_ID'))
 % Start the parallel pool
 parpool(local_cluster, NUM_CORE)
 
+local_cluster.NumWorkers
+
+return
 %% Experiment Variable
 % Path 
 IN_DIR = "/lustre03/project/6010672/yacine08/eeg_pain_data/";
@@ -40,7 +43,7 @@ bandpass_freqs = {[1 4], [4 8], [8 13], [13 30]};
 
 % This will be the same throughout the features
 WIN_SIZE = 10;
-STEP_SIZE = 0.1;
+STEP_SIZE = 10;
 
 % Spectrogram Params
 time_bandwith_product = 2;
@@ -62,14 +65,14 @@ directories = dir(IN_DIR);
 parfor id = 3:length(directories)
     folder = directories(id);
     disp(folder.name);
-    
-    out_file_participant = sprintf(OUT_FILE,folder.name);
-    write_header(out_file_participant, header, bandpass_names, max_location)
-        
+            
     % We skip participants that are problematic
     if(ismember(folder.name, rejected_participants))
         continue 
     end
+
+    out_file_participant = sprintf(OUT_FILE,folder.name);
+    write_header(out_file_participant, header, bandpass_names, max_location)
     
     % participant variable init
     p_id = str2num(extractAfter(folder.name,"E"));
