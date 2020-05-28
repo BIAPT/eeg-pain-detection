@@ -18,7 +18,6 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.impute import SimpleImputer
 
 import joblib
-from dask.distributed import Client, progress
 
 
 def classify_loso(X, y, group, clf):
@@ -172,8 +171,8 @@ def create_gridsearch_pipeline():
 
     # Candidate learning algorithms and their hyperparameters
     search_space = [{'clf': [LogisticRegression()],  # Actual Estimator
-                     'clf__penalty': ['l1', 'l2'],
-                     'clf__solver': ['saga'],
+                     'clf__penalty': ['l2'],
+                     'clf__solver': ['lbfgs'],
                      'clf__max_iter': [1000],
                      'clf__C': np.logspace(0, 4, 10)},
 

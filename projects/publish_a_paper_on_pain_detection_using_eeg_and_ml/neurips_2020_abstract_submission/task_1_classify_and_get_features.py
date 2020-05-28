@@ -17,8 +17,8 @@ if __name__ == '__main__':
     client = Client()
 
     # Global Experimental Variable
-    input_filename = '/lustre03/project/6010672/yacine08/eeg_pain_result//features_all.csv'
-
+    input_filename = '/lustre03/project/6010672/yacine08/eeg_pain_result/features_all.csv'
+    #input_filename = '/home/yacine/Documents/features_all.csv'
     gs = create_gridsearch_pipeline()
     X, y, group, df = pre_process(input_filename)
     accuracies, best_params = classify_loso_model_selection(X, y, group, gs)
