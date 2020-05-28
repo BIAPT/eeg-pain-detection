@@ -170,6 +170,7 @@ def create_gridsearch_pipeline():
         ('clf', DummyEstimator())])  # Placeholder Estimator
 
     # Candidate learning algorithms and their hyperparameters
+    '''
     search_space = [{'clf': [LogisticRegression()],  # Actual Estimator
                      'clf__penalty': ['l2'],
                      'clf__solver': ['lbfgs'],
@@ -182,7 +183,13 @@ def create_gridsearch_pipeline():
 
                     {'clf': [DecisionTreeClassifier()],  # Actual Estimator
                      'clf__criterion': ['gini', 'entropy']}]
+    '''
+    search_space = [{'clf': [SVC()],
+                     'clf__kernel': ['linear'],
+                     'clf__C': [1, 10, 100, 1000]},
 
+                    {'clf': [DecisionTreeClassifier()],  # Actual Estimator
+                     'clf__criterion': ['gini', 'entropy']}]
     # We will try to use as many processor as possible for the gridsearch
     gs = GridSearchCV(pipe, search_space, cv=LeaveOneGroupOut(), n_jobs=-1)
     return gs
