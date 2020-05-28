@@ -173,7 +173,7 @@ def create_gridsearch_pipeline():
     # Candidate learning algorithms and their hyperparameters
     search_space = [{'clf': [LogisticRegression()],  # Actual Estimator
                      'clf__penalty': ['l1', 'l2'],
-                     'clf__solver': ['liblinear'],
+                     'clf__solver': ['saga'],
                      'clf__C': np.logspace(0, 4, 10)},
 
                     {'clf': [SVC()],
