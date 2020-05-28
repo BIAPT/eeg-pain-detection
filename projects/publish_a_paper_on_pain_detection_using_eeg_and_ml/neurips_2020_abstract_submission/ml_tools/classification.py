@@ -18,7 +18,6 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.impute import SimpleImputer
 
 import joblib
-from dask.distributed import Client, progress
 
 
 def classify_loso(X, y, group, clf):
@@ -74,8 +73,8 @@ def classify_loso_model_selection(X, y, group, gs):
         print(f"Number of folds left: {num_folds}")
 
         # Here we use Dask to be able to train on all the core on a cluster
-        with joblib.parallel_backend('dask'):
-            gs.fit(X_train, y_train, groups=group_train)
+        #with joblib.parallel_backend('dask'):
+        gs.fit(X_train, y_train, groups=group_train)
 
         y_hat = gs.predict(X_test)
 
@@ -172,8 +171,8 @@ def create_gridsearch_pipeline():
 
     # Candidate learning algorithms and their hyperparameters
     search_space = [{'clf': [LogisticRegression()],  # Actual Estimator
-                     'clf__penalty': ['l1', 'l2'],
-                     'clf__solver': ['saga'],
+                     'clf__penalty': ['l2'],
+                     'clf__solver': ['lbfgs'],
                      'clf__max_iter': [1000],
                      'clf__C': np.logspace(0, 4, 10)},
 
