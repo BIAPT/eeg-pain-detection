@@ -14,5 +14,5 @@ module load python/3.7.4
 virtualenv --no-download $SLURM_TMPDIR/env
 source $SLURM_TMPDIR/env/bin/activate
 pip install --no-index --upgrade pip
-pip install -r requirements.txt
+pip install --no-index -r requirements.txt
 python task_1_classify_and_get_features.py
