@@ -60,7 +60,6 @@ def classify_loso_model_selection(X, y, group, gs):
         Returns:
             accuracies (list): the accuracy at for each leave one out participant
     """
-    client = Client()
 
     logo = LeaveOneGroupOut()
 

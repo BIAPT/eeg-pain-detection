@@ -10,24 +10,30 @@ from ml_tools.classification import classify_loso_model_selection
 from ml_tools.classification import create_gridsearch_pipeline
 from ml_tools.pre_processing import pre_process
 
-# Global Experimental Variable
-input_filename = '/lustre03/project/6010672/yacine08/eeg_pain_result//features_all.csv'
+from dask.distributed import Client
 
-gs = create_gridsearch_pipeline()
-X, y, group, df = pre_process(input_filename)
-accuracies, best_params = classify_loso_model_selection(X, y, group, gs)
+if __name__ == '__main__':
+    # Beluga Experimental Setup
+    client = Client()
 
-# Create the files and save them
-model_file = open('trained_gs', 'ab')
-accuracy_file = open('accuracies_result', 'ab')
-best_params_file = open('best_params', 'ab')
+    # Global Experimental Variable
+    input_filename = '/lustre03/project/6010672/yacine08/eeg_pain_result//features_all.csv'
 
-# source, destination
-pickle.dump(gs, model_file)
-model_file.close()
+    gs = create_gridsearch_pipeline()
+    X, y, group, df = pre_process(input_filename)
+    accuracies, best_params = classify_loso_model_selection(X, y, group, gs)
 
-pickle.dump(accuracies, accuracy_file)
-accuracy_file.close()
+    # Create the files and save them
+    model_file = open('trained_gs', 'ab')
+    accuracy_file = open('accuracies_result', 'ab')
+    best_params_file = open('best_params', 'ab')
 
-pickle.dump(best_params, best_params_file)
-best_params_file.close()
+    # source, destination
+    pickle.dump(gs, model_file)
+    model_file.close()
+
+    pickle.dump(accuracies, accuracy_file)
+    accuracy_file.close()
+
+    pickle.dump(best_params, best_params_file)
+    best_params_file.close()
