@@ -17,6 +17,8 @@ from sklearn.svm import SVC
 from sklearn.preprocessing import StandardScaler
 from sklearn.impute import SimpleImputer
 
+import joblib
+
 
 def classify_loso(X, y, group, clf):
     """ Main classification function to train and test a ml model with Leave one subject out
@@ -69,7 +71,10 @@ def classify_loso_model_selection(X, y, group, gs):
 
         print(f"Number of folds left: {num_folds}")
 
-        gs.fit(X_train, y_train, groups=group_train)
+        # Here we use Dask to be able to train on all the core on a cluster
+        with joblib.parallel_backend('dask'):
+            gs.fit(X_train, y_train, groups=group_train)
+            
         y_hat = gs.predict(X_test)
 
         accuracy = accuracy_score(y_test, y_hat)
