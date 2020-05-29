@@ -11,6 +11,6 @@ NOW=`date +%s%3N`
 `mkdir $OUT_DIR/$PROJECT_NAME\_$NOW`
 
 # Launching the Feature generation
-FEATURE_JOB_ID=`sbatch task_0_generate_feature.sl`
+FEATURE_JOB_ID=`sbatch task_0_generate_features.sl`
 
 echo "JOB ID for feature is : $FEATURE_JOB_ID"
