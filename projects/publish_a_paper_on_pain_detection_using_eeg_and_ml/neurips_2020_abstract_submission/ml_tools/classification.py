@@ -19,6 +19,8 @@ from sklearn.impute import SimpleImputer
 
 import joblib
 
+import pickle
+
 
 def classify_loso(X, y, group, clf):
     """ Main classification function to train and test a ml model with Leave one subject out
@@ -147,6 +149,14 @@ def bootstrap_interval(X, y, group, clf, num_resample=1000, p_value=0.05):
 
     return acc_distribution, acc_interval
 
+# Create LOSO Grid Search to search amongst many classifier
+class DummyEstimator(BaseEstimator):
+    """Dummy estimator to allow gridsearch to test many estimator"""
+
+    def fit(self): pass
+    
+    def score(self): pass
+
 
 def create_gridsearch_pipeline():
     """ Helper function to create a gridsearch with a search space containing classifiers
@@ -154,14 +164,6 @@ def create_gridsearch_pipeline():
         Returns:
             gs (sklearn gridsearch): this is the grid search objec wrapping the pipeline
     """
-
-    # Create LOSO Grid Search to search amongst many classifier
-    class DummyEstimator(BaseEstimator):
-        """Dummy estimator to allow gridsearch to test many estimator"""
-
-        def fit(self): pass
-
-        def score(self): pass
 
     # Create a pipeline
     pipe = Pipeline([
@@ -189,3 +191,10 @@ def create_gridsearch_pipeline():
     # We will try to use as many processor as possible for the gridsearch
     gs = GridSearchCV(pipe, search_space, cv=LeaveOneGroupOut(), n_jobs=-1)
     return gs
+
+def save_model(gs, model_file):
+    
+    model_file = open(model_file, 'ab')
+    
+    pickle.dump(gs, model_file)
+    model_file.close()
