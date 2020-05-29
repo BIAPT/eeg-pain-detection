@@ -8,7 +8,9 @@ import pickle
 
 from ml_tools.classification import classify_loso_model_selection
 from ml_tools.classification import create_gridsearch_pipeline
+from ml_tools.classification import save_model
 from ml_tools.pre_processing import pre_process
+
 
 
 
@@ -21,13 +23,10 @@ if __name__ == '__main__':
     accuracies, best_params = classify_loso_model_selection(X, y, group, gs)
 
     # Create the files and save them
-    model_file = open('trained_gs', 'ab')
+    save_model(gs, 'trained_gs.pickle')
+
     accuracy_file = open('accuracies_result', 'ab')
     best_params_file = open('best_params', 'ab')
-
-    # source, destination
-    pickle.dump(gs, model_file)
-    model_file.close()
 
     pickle.dump(accuracies, accuracy_file)
     accuracy_file.close()
