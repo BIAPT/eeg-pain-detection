@@ -10,24 +10,12 @@ from ml_tools.classification import classify_loso_model_selection
 from ml_tools.classification import create_gridsearch_pipeline
 from ml_tools.pre_processing import pre_process
 
-from dask.distributed import Client
-from dask_jobqueue import SLURMCluster
-
 
 
 if __name__ == '__main__':
-    # Beluga Experimental Setup
-    cluster = SLURMCluster(
-        queue='regular',
-        project="myproj",
-        cores=40,
-        memory="90GB"
-    )
-    client = Client(cluster)
-
     # Global Experimental Variable
-    input_filename = '/lustre03/project/6010672/yacine08/eeg_pain_result/features_all.csv'
-    #input_filename = '/home/yacine/Documents/features_all.csv'
+    #input_filename = '/lustre03/project/6010672/yacine08/eeg_pain_result/features_all.csv'
+    input_filename = '/home/yacine/Documents/features_all.csv'
     gs = create_gridsearch_pipeline()
     X, y, group, df = pre_process(input_filename)
     accuracies, best_params = classify_loso_model_selection(X, y, group, gs)
