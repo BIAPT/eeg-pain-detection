@@ -9,6 +9,8 @@
 #SBATCH --mail-user=yacine.mahdid@mail.mcgill.ca 
 #SBATCH --mail-type=ALL
 
+
+echo $OUT_PATH
 # Choose a version of MATLAB by loading a module:
 module load matlab/2018a
 
