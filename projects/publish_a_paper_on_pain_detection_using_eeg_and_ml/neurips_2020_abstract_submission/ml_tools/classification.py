@@ -12,7 +12,7 @@ from sklearn.model_selection import GridSearchCV
 
 from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.svm import SVC
+from sklearn.svm import LinearSVC
 
 from sklearn.preprocessing import StandardScaler
 from sklearn.impute import SimpleImputer
@@ -73,7 +73,7 @@ def classify_loso_model_selection(X, y, group, gs):
         print(f"Number of folds left: {num_folds}")
 
         # Here we use Dask to be able to train on all the core on a cluster
-        with joblib.parallel_backend('dask'):
+        with joblib.parallel_backend('loky'):
             gs.fit(X_train, y_train, groups=group_train)
 
         y_hat = gs.predict(X_test)
@@ -184,12 +184,8 @@ def create_gridsearch_pipeline():
                     {'clf': [DecisionTreeClassifier()],  # Actual Estimator
                      'clf__criterion': ['gini', 'entropy']}]
     '''
-    search_space = [{'clf': [SVC()],
-                     'clf__kernel': ['linear'],
-                     'clf__C': [1, 10, 100, 1000]},
-
-                    {'clf': [DecisionTreeClassifier()],  # Actual Estimator
-                     'clf__criterion': ['gini', 'entropy']}]
+    search_space = [{'clf': [LinearSVC()],
+                     'clf__C': [1, 10, 100]}]
     # We will try to use as many processor as possible for the gridsearch
     gs = GridSearchCV(pipe, search_space, cv=LeaveOneGroupOut(), n_jobs=-1)
     return gs
