@@ -20,16 +20,16 @@ if __name__ == '__main__':
     #input_filename = '/home/yacine/Documents/features_all.csv'
     gs = create_gridsearch_pipeline()
     X, y, group, df = pre_process(input_filename)
+    
     accuracies, best_params = classify_loso_model_selection(X, y, group, gs)
 
     # Create the files and save them
     save_model(gs, 'trained_gs.pickle')
 
-    accuracy_file = open('accuracies_result', 'ab')
-    best_params_file = open('best_params', 'ab')
-
+    accuracy_file = open('accuracies_result.pickle', 'ab')
     pickle.dump(accuracies, accuracy_file)
     accuracy_file.close()
 
+    best_params_file = open('best_params.pickle', 'ab')
     pickle.dump(best_params, best_params_file)
     best_params_file.close()

@@ -678,3 +678,16 @@ Mean accuracy: 0.6416815286129934
 ```
 
 ![Both Low resolution](./.figure/BOTH_n=65_accuracy.png)
+
+## Permutation Tests
+```
+Random:
+(49.714616062279106, 49.55401804514053, 49.3867734415238)
+Actual Improvement
+(19.078412567706053, 15.145268534974157, 16.17534626480611)
+P Value:
+(0.000999000999000999, 0.000999000999000999, 0.000999000999000999)
+Healthy, MSK, Both
+```
+
+![Permutation Tests Result](./.figure/permutation_tests.png)
