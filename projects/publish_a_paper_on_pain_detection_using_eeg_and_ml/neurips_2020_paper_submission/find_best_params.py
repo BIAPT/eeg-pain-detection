@@ -18,12 +18,13 @@ if __name__ == '__main__':
     output_dir = '/lustre03/project/6010672/yacine08/eeg_pain_result/'
     gs_filename = output_dir + 'trained_gs.pickle'
     acc_filename = output_dir + 'accuracies_result.pickle'
+    f1_filename = output_dir + 'f1s_result.pickle'
     best_params_filename = output_dir + 'best_params.pickle'
 
     gs = create_gridsearch_pipeline()
     X, y, group, df = pre_process(input_filename)
     
-    accuracies, best_params = classify_loso_model_selection(X, y, group, gs)
+    accuracies, f1s, best_params = classify_loso_model_selection(X, y, group, gs)
 
     # Create the files and save them
     save_model(gs, gs_filename)
@@ -31,6 +32,10 @@ if __name__ == '__main__':
     accuracy_file = open(acc_filename, 'ab')
     pickle.dump(accuracies, accuracy_file)
     accuracy_file.close()
+
+    f1_file = open(f1_filename, 'ab')
+    pickle.dump(f1s, f1_file)
+    f1_file.close()
 
     best_params_file = open(best_params_filename, 'ab')
     pickle.dump(best_params, best_params_file)

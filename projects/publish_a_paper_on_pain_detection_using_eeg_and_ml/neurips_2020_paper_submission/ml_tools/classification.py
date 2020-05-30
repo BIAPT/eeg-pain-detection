@@ -2,6 +2,8 @@ from math import floor
 import numpy as np
 
 from sklearn.metrics import accuracy_score
+from sklearn.metrics import f1_score
+
 from sklearn.model_selection import LeaveOneGroupOut
 from sklearn.model_selection import permutation_test_score
 from sklearn.utils import resample
@@ -65,7 +67,10 @@ def classify_loso_model_selection(X, y, group, gs):
     logo = LeaveOneGroupOut()
 
     accuracies = []
+    f1s = []
+    aucs = []
     best_params = []
+
     num_folds = logo.get_n_splits(X, y, group) # keep track of how many folds left
     for train_index, test_index in logo.split(X, y, group):
         X_train, X_test = X[train_index], X[test_index]
@@ -81,12 +86,14 @@ def classify_loso_model_selection(X, y, group, gs):
         y_hat = gs.predict(X_test)
 
         accuracy = accuracy_score(y_test, y_hat)
+        f1 = f1_score(y_test, y_hat)
 
         accuracies.append(accuracy)
+        f1s.append(f1)
         best_params.append(gs.best_params_)
 
         num_folds = num_folds - 1
-    return accuracies, best_params
+    return accuracies, f1s, best_params
 
 
 def permutation_test(X, y, group, clf, num_permutation=1000):
@@ -188,6 +195,7 @@ def create_gridsearch_pipeline():
     '''
     search_space = [{'clf': [LinearSVC()],
                      'clf__C': [1, 10, 100]}]
+
     # We will try to use as many processor as possible for the gridsearch
     gs = GridSearchCV(pipe, search_space, cv=LeaveOneGroupOut(), n_jobs=-1)
     return gs
