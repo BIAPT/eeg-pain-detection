@@ -156,6 +156,8 @@ for id = 3:length(directories)
         row = table_data(w,:);
         dlmwrite(OUT_FILE_ALL, [row], '-append');
     end
+
+    delete(out_file_participant);
 end
 
 function write_header(OUT_FILE, header, bandpass_names, max_location)
