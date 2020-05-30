@@ -141,7 +141,7 @@ def bootstrap_interval(X, y, group, clf, num_resample=1000, p_value=0.05):
             acc_interval (float vector): a lower and upper interval on the accuracies corresponding to the p value
     """
 
-    def classify(sample_id): 
+    def classify(X, y, group, clf, sample_id,): 
         print("Bootstrap sample #" + str(sample_id))
 
         # Get the sampled with replacement dataset
@@ -156,8 +156,10 @@ def bootstrap_interval(X, y, group, clf, num_resample=1000, p_value=0.05):
     # Setup the pool of available cores
     ncpus = int(os.environ.get('SLURM_CPUS_PER_TASK',default=1))
     pool = mp.Pool(processes=ncpus)
+
     # Calculate each round asynchronously
-    results = [pool.apply_async(classify, args=(sample_id,)) for sample_id in range(num_resample)]
+    results = [pool.apply_async(classify, args=(X, y, group, clf, sample_id,)) for sample_id in range(num_resample)]
+
     # Unpack the results
     acc_distribution = [p.get() for p in results]
 
