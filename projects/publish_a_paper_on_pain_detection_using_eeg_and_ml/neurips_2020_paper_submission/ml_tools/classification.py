@@ -79,7 +79,6 @@ def classify_loso_model_selection(X, y, group, gs):
 
         print(f"Number of folds left: {num_folds}")
 
-        # Here we use Dask to be able to train on all the core on a cluster
         with joblib.parallel_backend('loky'):
             gs.fit(X_train, y_train, groups=group_train)
 
@@ -113,9 +112,12 @@ def permutation_test(X, y, group, clf, num_permutation=1000):
 
     logo = LeaveOneGroupOut()
     train_test_splits = logo.split(X, y, group)
-    (accuracy, permutation_scores, p_value) = permutation_test_score(clf, X, y, groups=group, cv=train_test_splits,
-                                                                     n_permutations=num_permutation,
-                                                                     verbose=num_permutation, n_jobs=-1)
+
+    with joblib.parallel_backend('loky'):
+        (accuracy, permutation_scores, p_value) = permutation_test_score(clf, X, y, groups=group, cv=train_test_splits,
+                                                                        n_permutations=num_permutation,
+                                                                        verbose=num_permutation, n_jobs=-1)
+        
     return accuracy, permutation_scores, p_value
 
 
