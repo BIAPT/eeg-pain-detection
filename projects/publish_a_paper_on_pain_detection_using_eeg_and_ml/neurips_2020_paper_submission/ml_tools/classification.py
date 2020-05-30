@@ -146,7 +146,7 @@ def bootstrap_interval(X, y, group, clf, num_resample=1000, p_value=0.05):
     pool = mp.Pool(processes=ncpus)
 
     # Calculate each round asynchronously
-    results = [pool.apply_async(classify, args=(X, y, group, clf, sample_id,)) for sample_id in range(num_resample)]
+    results = [pool.apply_async(bootstrap_classify, args=(X, y, group, clf, sample_id,)) for sample_id in range(num_resample)]
 
     # Unpack the results
     acc_distribution = [p.get() for p in results]
