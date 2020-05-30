@@ -24,7 +24,7 @@ parpool(local_cluster, NUM_CORE)
 % Path 
 IN_DIR = "/lustre03/project/6010672/yacine08/eeg_pain_data/";
 FULL_HEADSET_LOCATION = "/lustre03/project/6010672/yacine08/eeg-pain-detection/projects/.data/full_headset_location.mat";
-OUT_FILE = strcat(OUT_PATH,"/features_%s.csv";
+OUT_FILE = "/lustre03/project/6010672/yacine08/eeg_pain_result/features_%s.csv";
 
 % Global Experiment Variable
 rejected_participants = {
