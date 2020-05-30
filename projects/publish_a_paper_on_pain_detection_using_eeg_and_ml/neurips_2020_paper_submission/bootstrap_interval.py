@@ -48,7 +48,7 @@ pipe = Pipeline([
     ('SVM', clf)])
 
 # Training and bootstrap interval generation
-X, y, group = pre_process(input_filename)
+X, y, group, df = pre_process(input_filename)
 acc_distribution, acc_interval = bootstrap_interval(X, y, group, pipe, num_resample=1000, p_value=0.05)
 
 # Save the data to disk
