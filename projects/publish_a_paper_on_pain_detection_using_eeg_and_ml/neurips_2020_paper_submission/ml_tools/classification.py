@@ -141,18 +141,6 @@ def bootstrap_interval(X, y, group, clf, num_resample=1000, p_value=0.05):
             acc_interval (float vector): a lower and upper interval on the accuracies corresponding to the p value
     """
 
-    def classify(X, y, group, clf, sample_id,): 
-        print("Bootstrap sample #" + str(sample_id))
-
-        # Get the sampled with replacement dataset
-        sample_X, sample_y, sample_group = resample(X, y, group)
-
-        # Classify and get the results
-        accuracies = classify_loso(sample_X, sample_y, sample_group, clf)
-
-        return np.mean(accuracies)
-
-
     # Setup the pool of available cores
     ncpus = int(os.environ.get('SLURM_CPUS_PER_TASK',default=1))
     pool = mp.Pool(processes=ncpus)
@@ -223,3 +211,15 @@ def save_model(gs, model_file):
     
     pickle.dump(gs, model_file)
     model_file.close()
+
+
+def bootstrap_classify(X, y, group, clf, sample_id,): 
+    print("Bootstrap sample #" + str(sample_id))
+
+    # Get the sampled with replacement dataset
+    sample_X, sample_y, sample_group = resample(X, y, group)
+
+    # Classify and get the results
+    accuracies = classify_loso(sample_X, sample_y, sample_group, clf)
+
+    return np.mean(accuracies)
