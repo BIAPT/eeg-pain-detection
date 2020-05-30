@@ -2,6 +2,8 @@
 % We basically needs to calculate Power, wPLI and peak frequency
 % the first two need to be calculated at delta, theta, alpha, beta
 
+disp("LISTEN!")
+disp(OUT_PATH)
 
 %% BELUGA Setup
 NEUROALGO_PATH = "/lustre03/project/6010672/yacine08/NeuroAlgo";
@@ -21,7 +23,6 @@ pc.JobStorageLocation = strcat('/scratch/YourUsername/', getenv('SLURM_JOB_ID'))
 % Start the parallel pool
 parpool(local_cluster, NUM_CORE)
 
-local_cluster.NumWorkers
 %% Experiment Variable
 % Path 
 IN_DIR = "/lustre03/project/6010672/yacine08/eeg_pain_data/";

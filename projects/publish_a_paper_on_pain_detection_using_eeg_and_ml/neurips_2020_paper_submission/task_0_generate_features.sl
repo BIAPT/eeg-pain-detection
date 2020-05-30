@@ -18,7 +18,7 @@ module load matlab/2018a
 mkdir -p /scratch/$USER/$SLURM_JOB_ID
 
 # Remove -singleCompThread below if you are using parallel commands:
-srun matlab -nodisplay -r "generate_features"
+srun matlab -nodisplay -r "OUT_PATH=$OUT_PATH; generate_features"
 
 # Cleanup
 rm -rf /scratch/$USER/$SLURM_JOB_ID
