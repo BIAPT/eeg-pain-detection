@@ -23,6 +23,9 @@ import joblib
 
 import pickle
 
+import multiprocessing as mp
+import os
+
 
 def classify_loso(X, y, group, clf):
     """ Main classification function to train and test a ml model with Leave one subject out
@@ -138,8 +141,7 @@ def bootstrap_interval(X, y, group, clf, num_resample=1000, p_value=0.05):
             acc_interval (float vector): a lower and upper interval on the accuracies corresponding to the p value
     """
 
-    acc_distribution = []
-    for sample_id in range(num_resample):
+    def classify(sample_id): 
         print("Bootstrap sample #" + str(sample_id))
 
         # Get the sampled with replacement dataset
@@ -147,7 +149,17 @@ def bootstrap_interval(X, y, group, clf, num_resample=1000, p_value=0.05):
 
         # Classify and get the results
         accuracies = classify_loso(sample_X, sample_y, sample_group, clf)
-        acc_distribution.append(np.mean(accuracies))
+
+        return np.mean(accuracies)
+
+
+    # Setup the pool of available cores
+    ncpus = int(os.environ.get('SLURM_CPUS_PER_TASK',default=1))
+    pool = mp.Pool(processes=ncpus)
+    # Calculate each round asynchronously
+    results = [pool.apply_async(classify, args=(sample_id,)) for sample_id in range(num_resample)]
+    # Unpack the results
+    acc_distribution = [p.get() for p in results]
 
     # Sort the results
     acc_distribution.sort()
