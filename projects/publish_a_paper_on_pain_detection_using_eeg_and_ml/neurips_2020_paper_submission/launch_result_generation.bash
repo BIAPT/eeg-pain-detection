@@ -9,12 +9,12 @@
 # Setting variables
 NOW=`date +%s%3N`
 
-$OUT_PATH=`$OUT_DIR/$PROJECT_NAME\_$NOW`
+OUT_PATH="$OUT_DIR/$PROJECT_NAME-$NOW"
 
 # Creating the Directory structure
-`mkdir $OUT_PATH`
+mkdir "$OUT_PATH"
 
 # Launching the Feature generation
-FEATURE_JOB_ID=`sbatch --export=OUT_PATH='$OUT_PATH' task_0_generate_features.sl`
+FEATURE_JOB_ID=`sbatch --export=OUT_PATH=$OUT_PATH task_0_generate_features.sl`
 
 echo "JOB ID for feature is : $FEATURE_JOB_ID"
