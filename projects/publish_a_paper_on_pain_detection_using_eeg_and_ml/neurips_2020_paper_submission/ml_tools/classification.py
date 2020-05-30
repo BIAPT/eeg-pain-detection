@@ -43,7 +43,8 @@ def classify_loso(X, y, group, clf):
         X_train, X_test = X[train_index], X[test_index]
         y_train, y_test = y[train_index], y[test_index]
 
-        clf.fit(X_train, y_train)
+        with joblib.parallel_backend('loky'):
+            clf.fit(X_train, y_train)
         y_hat = clf.predict(X_test)
 
         accuracy = accuracy_score(y_test, y_hat)
@@ -117,7 +118,7 @@ def permutation_test(X, y, group, clf, num_permutation=1000):
         (accuracy, permutation_scores, p_value) = permutation_test_score(clf, X, y, groups=group, cv=train_test_splits,
                                                                         n_permutations=num_permutation,
                                                                         verbose=num_permutation, n_jobs=-1)
-        
+
     return accuracy, permutation_scores, p_value
 
 
