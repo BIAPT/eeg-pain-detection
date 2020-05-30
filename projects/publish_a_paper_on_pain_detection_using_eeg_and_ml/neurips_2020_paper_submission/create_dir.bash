@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -l
 # Simple Bash script to create the directory structure we need for the analysis
 # Then to launch each analysis properly with the right dependencies for the scheduler
 
@@ -13,8 +13,3 @@ OUT_PATH="$OUT_DIR/$PROJECT_NAME-$NOW"
 
 # Creating the Directory structure
 mkdir "$OUT_PATH"
-
-# Launching the Feature generation
-FEATURE_JOB_ID=`sbatch --export=OUT_PATH=$OUT_PATH task_0_generate_features.sl`
-
-echo "JOB ID for feature is : $FEATURE_JOB_ID"
