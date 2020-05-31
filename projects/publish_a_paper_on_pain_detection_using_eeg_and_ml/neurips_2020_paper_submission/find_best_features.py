@@ -60,6 +60,7 @@ feature_weights = clf.coef_[0]
 
 features = df.drop(['id', 'is_hot'], axis=1)
 feature_names = list(features.columns.values)
+feature_names.append('wtf')
 
 
 # Save the data to disk
