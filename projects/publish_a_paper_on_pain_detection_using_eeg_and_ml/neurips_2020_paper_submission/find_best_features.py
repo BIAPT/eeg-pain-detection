@@ -41,6 +41,7 @@ input_filename = '/lustre03/project/6010672/yacine08/eeg_pain_result/features_al
 output_dir = '/lustre03/project/6010672/yacine08/eeg_pain_result/'
 features_filename = output_dir + 'features.pickle'
 
+# TO MODIFY!
 clf = LinearSVC(C=1)
 pipe = Pipeline([
     ('imputer', SimpleImputer(missing_values=np.nan, strategy='mean')),
@@ -55,7 +56,8 @@ pipe.fit(X, y)
 clf = pipe.steps[2][1]
 feature_weights = clf.coef_[0]
 
-feature_df = df.drop(['id', 'type', 'is_hot'], axis=1)
+
+feature_df = df.drop(['id', 'is_hot'], axis=1)
 feature_names = list(feature_df.columns.values)
 
 

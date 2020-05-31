@@ -1,7 +1,7 @@
 #!/bin/bash -l
 #SBATCH --job-name=yacine08_gen_features
 #SBATCH --account=def-sblain # adjust this to match the accounting group you are using to submit jobs
-#SBATCH --time=0-0:30:00        # adjust this to match the walltime of your job (D-HH:MM:SS)
+#SBATCH --time=0-1:00:00        # adjust this to match the walltime of your job (D-HH:MM:SS)
 #SBATCH --nodes=1      
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=40      # adjust this if you are using parallel commands
@@ -18,7 +18,7 @@ module load matlab/2018a
 mkdir -p /scratch/$USER/$SLURM_JOB_ID
 
 # Remove -singleCompThread below if you are using parallel commands:
-srun matlab -nodisplay -r "OUT_PATH='$OUT_PATH'; generate_features"
+srun matlab -nodisplay -r "generate_features"
 
 # Cleanup
 rm -rf /scratch/$USER/$SLURM_JOB_ID

@@ -83,5 +83,5 @@ if __name__ == '__main__':
     f1_file.close()
 
     best_params_file = open(best_params_filename, 'ab')
-    pickle.dump(best_params, best_params_file)
+    pickle.dump(model_occurence, best_params_file)
     best_params_file.close()
