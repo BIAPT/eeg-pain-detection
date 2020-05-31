@@ -6,6 +6,7 @@ from sklearn.svm import LinearSVC
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.impute import SimpleImputer
+from sklearn.linear_model import LogisticRegression
 
 from ml_tools.classification import create_gridsearch_pipeline
 from ml_tools.classification import permutation_test
