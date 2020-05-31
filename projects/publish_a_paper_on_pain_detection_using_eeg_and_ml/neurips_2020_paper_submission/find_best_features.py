@@ -34,6 +34,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.impute import SimpleImputer
 from sklearn.svm import SVC
 from sklearn.svm import LinearSVC
+from sklearn.linear_model import LogisticRegression
 
 import config as cfg
 
