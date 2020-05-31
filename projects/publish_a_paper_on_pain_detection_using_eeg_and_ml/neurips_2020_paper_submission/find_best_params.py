@@ -16,6 +16,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.svm import LinearSVC
 
+import config as cfg
 
 def find_best_model(best_params):
     models_occurence = {}
@@ -59,9 +60,10 @@ if __name__ == '__main__':
     f1_filename = output_dir + 'f1s_result.pickle'
     best_params_filename = output_dir + 'best_params.pickle'
 
+
     # Actual Training
     gs = create_gridsearch_pipeline()
-    X, y, group, df = pre_process(input_filename)
+    X, y, group, df = pre_process(input_filename, cfg.PARTICIPANT_TYPE)
     accuracies, f1s, best_params = classify_loso_model_selection(X, y, group, gs)
 
     # Print out the summary in the console

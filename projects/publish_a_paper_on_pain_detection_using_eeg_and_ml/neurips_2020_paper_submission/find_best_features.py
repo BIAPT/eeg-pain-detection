@@ -35,6 +35,8 @@ from sklearn.impute import SimpleImputer
 from sklearn.svm import SVC
 from sklearn.svm import LinearSVC
 
+import config as cfg
+
 
 # Setup the experiment to test the above function
 input_filename = '/lustre03/project/6010672/yacine08/eeg_pain_result/features_all.csv'
@@ -49,7 +51,7 @@ pipe = Pipeline([
     ('SVM', clf)])
 
 # Training and bootstrap interval generation
-X, y, group, df = pre_process(input_filename)
+X, y, group, df = pre_process(input_filename, cfg.PARTICIPANT_TYPE)
 
 # Fitting the classifier with all the data
 pipe.fit(X, y)
