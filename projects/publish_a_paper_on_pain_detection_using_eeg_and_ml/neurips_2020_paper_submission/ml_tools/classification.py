@@ -190,8 +190,7 @@ def create_gridsearch_pipeline():
                      'clf__max_iter': [1000],
                      'clf__C': np.logspace(0, 4, 10)},
 
-                    {'clf': [SVC()],
-                     'clf__kernel': ['linear'],
+                    {'clf': [LinearSVC()],
                      'clf__C': [1, 10, 100, 1000]},
 
                     {'clf': [DecisionTreeClassifier()],  # Actual Estimator
