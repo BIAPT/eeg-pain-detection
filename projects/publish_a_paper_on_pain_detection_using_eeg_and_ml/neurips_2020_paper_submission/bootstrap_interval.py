@@ -43,7 +43,8 @@ input_filename = '/lustre03/project/6010672/yacine08/eeg_pain_result/features_al
 output_dir = '/lustre03/project/6010672/yacine08/eeg_pain_result/'
 bootstrap_filename = output_dir + 'bootstrap.pickle'
 
-clf = LinearSVC(C=10)
+#clf = LinearSVC(C=10) #Both
+clf = LogisticRegression() #healthy
 pipe = Pipeline([
     ('imputer', SimpleImputer(missing_values=np.nan, strategy='mean')),
     ('scaler', StandardScaler()),
