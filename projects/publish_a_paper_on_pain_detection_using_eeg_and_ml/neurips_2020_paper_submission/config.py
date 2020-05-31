@@ -1,3 +1,3 @@
 #!/usr/bin/env python
 
-PARTICIPANT_TYPE = "HEALTHY"
+PARTICIPANT_TYPE = "BOTH"
