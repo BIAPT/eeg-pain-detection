@@ -59,8 +59,7 @@ clf = pipe.steps[2][1]
 feature_weights = clf.coef_[0]
 
 
-feature_df = df.drop(['id', 'is_hot'], axis=1)
-feature_names = list(feature_df.columns.values)
+feature_names = list(df.columns.values)
 
 
 # Save the data to disk
