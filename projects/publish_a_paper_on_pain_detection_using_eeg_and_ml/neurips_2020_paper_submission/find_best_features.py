@@ -58,8 +58,8 @@ pipe.fit(X, y)
 clf = pipe.steps[2][1]
 feature_weights = clf.coef_[0]
 
-
-feature_names = list(df.columns.values)
+features = df.drop(['id', 'is_hot'], axis=1)
+feature_names = list(features.columns.values)
 
 
 # Save the data to disk
@@ -68,6 +68,7 @@ features_data = {
     'weight': feature_weights,
     'name': feature_names
 }
+
 pickle.dump(features_data, features_file)
 features_file.close()
 
