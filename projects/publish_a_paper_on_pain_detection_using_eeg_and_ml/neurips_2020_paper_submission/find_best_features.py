@@ -60,11 +60,11 @@ feature_weights = clf.coef_[0]
 
 features = df.drop(['id', 'is_hot'], axis=1)
 feature_names = list(features.columns.values)
-feature_names.append('wtf')
 
 
 # Save the data to disk
 features_file = open(features_filename, 'ab')
+
 features_data = {
     'weight': feature_weights,
     'name': feature_names
@@ -74,6 +74,7 @@ pickle.dump(features_data, features_file)
 features_file.close()
 
 # Print out some high level sumary
+print(features_data)
 print("Num Weights: ")
 print(len(feature_weights))
 print("Num Names: ")
