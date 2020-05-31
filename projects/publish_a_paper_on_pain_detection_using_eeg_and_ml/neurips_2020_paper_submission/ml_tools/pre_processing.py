@@ -37,10 +37,7 @@ def pre_process(input_filename, population_id="BOTH"):
     df.loc[df['type'] == 0, ['id']] += 1000
 
     # Extract the right information for ml part
-    if population_id == 'BOTH':
-        X = df.drop(['id', 'is_hot'], axis=1).to_numpy()
-    else:
-        X = df.drop(['id', 'type', 'is_hot'], axis=1).to_numpy()
+    X = df.drop(['id', 'is_hot'], axis=1).to_numpy()
 
     y = df.is_hot.to_numpy()
     group = df.id.to_numpy()

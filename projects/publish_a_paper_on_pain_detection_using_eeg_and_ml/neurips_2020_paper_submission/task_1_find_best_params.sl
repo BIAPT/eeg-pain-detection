@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=ml_yacine08_job
+#SBATCH --job-name=best-params
 #SBATCH --account=def-sblain
 #SBATCH --mem=90000      # increase as needed
 #SBATCH --time=0-03:00:00

@@ -11,6 +11,7 @@ from ml_tools.classification import create_gridsearch_pipeline
 from ml_tools.classification import permutation_test
 from ml_tools.pre_processing import pre_process
 
+import config as cfg
 
 # Global Experimental Variable
 input_filename = '/lustre03/project/6010672/yacine08/eeg_pain_result/features_all.csv'
@@ -26,7 +27,7 @@ pipe = Pipeline([
 
 # Train and do the permutaiton test
 gs = create_gridsearch_pipeline()
-X, y, group, df = pre_process(input_filename)
+X, y, group, df = pre_process(input_filename, cfg.PARTICIPANT_TYPE)
 acc, perms, p_value = permutation_test(X, y, group, pipe, num_permutation=1000)
 
 # Print out some high level sumarry
