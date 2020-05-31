@@ -73,6 +73,10 @@ pickle.dump(features_data, features_file)
 features_file.close()
 
 # Print out some high level sumary
+print("Num Weights: ")
+print(len(feature_weights))
+print("Num Names: ")
+print(len(feature_names))
 print("Features:")
 for weight, name in zip(feature_weights, feature_names):
     print(f"Feature {name} has weights: {weight}")
