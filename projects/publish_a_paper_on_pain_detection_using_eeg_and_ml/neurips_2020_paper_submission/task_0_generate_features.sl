@@ -1,5 +1,5 @@
 #!/bin/bash -l
-#SBATCH --job-name=yacine08_gen_features
+#SBATCH --job-name=make-features
 #SBATCH --account=def-sblain # adjust this to match the accounting group you are using to submit jobs
 #SBATCH --time=0-1:00:00        # adjust this to match the walltime of your job (D-HH:MM:SS)
 #SBATCH --nodes=1      
