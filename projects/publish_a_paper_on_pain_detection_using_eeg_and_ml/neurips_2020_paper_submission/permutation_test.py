@@ -19,7 +19,7 @@ output_dir = '/lustre03/project/6010672/yacine08/eeg_pain_result/'
 perms_filename = output_dir + 'permutation_test.pickle'
 
 # Once we know the model occurence we can check the random level with a permutation test of n = 1000
-clf = LinearSVC(C=1)
+clf = LinearSVC(C=10)
 pipe = Pipeline([
     ('imputer', SimpleImputer(missing_values=np.nan, strategy='mean')),
     ('scaler', StandardScaler()),
