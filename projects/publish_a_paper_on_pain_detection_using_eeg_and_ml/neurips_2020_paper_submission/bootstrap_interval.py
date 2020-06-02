@@ -33,20 +33,20 @@ pipe = Pipeline([
 
 # Training and bootstrap interval generation
 X, y, group, df = pre_process(cfg.DF_FILE_PATH, cfg.PARTICIPANT_TYPE)
-f1_distribution, f1_interval = bootstrap_interval(X, y, group, pipe, num_resample=1000, p_value=0.05)
+acc_distribution, acc_interval = bootstrap_interval(X, y, group, pipe, num_resample=1000, p_value=0.05)
 
 # Save the data to disk
 bootstrap_file = open(bootstrap_filename, 'ab')
 bootstrap_data = {
-    'distribution': f1_distribution,
-    'interval': f1_interval
+    'distribution': acc_distribution,
+    'interval': acc_interval
 }
 pickle.dump(bootstrap_data, bootstrap_file)
 bootstrap_file.close()
 
 # Print out some high level sumarry
 print("F1 Distribution:")
-print(f1_distribution)
-print(f"Mean: {np.mean(f1_distribution)} and std: {np.std(f1_distribution)}")
+print(acc_distribution)
+print(f"Mean: {np.mean(acc_distribution)} and std: {np.std(acc_distribution)}")
 print("Bootstrap Interval")
-print(f1_interval)
+print(acc_interval)

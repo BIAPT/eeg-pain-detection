@@ -20,8 +20,10 @@ output_dir = '/lustre03/project/6010672/yacine08/eeg_pain_result/'
 perms_filename = output_dir + 'permutation_test.pickle'
 
 # Once we know the model occurence we can check the random level with a permutation test of n = 1000
-#clf = LinearSVC(C=10) #Both
-clf = LogisticRegression() #healthy
+if cfg.PARTICIPANT_TYPE == "HEALTHY":
+    clf = LogisticRegression()  # healthy
+else:
+    clf = LinearSVC(C=10) # Both and MSK
 
 pipe = Pipeline([
     ('imputer', SimpleImputer(missing_values=np.nan, strategy='mean')),
@@ -31,13 +33,13 @@ pipe = Pipeline([
 # Train and do the permutaiton test
 gs = create_gridsearch_pipeline()
 X, y, group, df = pre_process(cfg.DF_FILE_PATH, cfg.PARTICIPANT_TYPE)
-f1, perms, p_value = permutation_test(X, y, group, pipe, num_permutation=1000)
+acc, perms, p_value = permutation_test(X, y, group, pipe, num_permutation=1000)
 
 # Print out some high level sumarry
 print("Random:")
 print(np.mean(perms))
 print("Actual Improvement")
-print(f1)
+print(acc)
 print("P Value:")
 print(p_value)
 
