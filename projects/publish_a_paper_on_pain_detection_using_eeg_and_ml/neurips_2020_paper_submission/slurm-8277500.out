@@ -1,0 +1,235 @@
+Using base prefix '/cvmfs/soft.computecanada.ca/easybuild/software/2017/Core/python/3.7.4'
+New python executable in /localscratch/yacine08.8277500.0/env/bin/python
+Installing setuptools, pip, wheel...
+done.
+Ignoring pip: markers 'python_version < "3"' don't match your environment
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/nix/avx512, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/nix/avx2, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/nix/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already up-to-date: pip in /localscratch/yacine08.8277500.0/env/lib/python3.7/site-packages (19.1.1)
+Ignoring pip: markers 'python_version < "3"' don't match your environment
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/nix/avx512, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/nix/avx2, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/nix/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Collecting scikit-learn
+Collecting numpy>=1.13.3 (from scikit-learn)
+Collecting scipy>=0.19.1 (from scikit-learn)
+Collecting threadpoolctl>=2.0.0 (from scikit-learn)
+Collecting joblib>=0.11 (from scikit-learn)
+Installing collected packages: numpy, scipy, threadpoolctl, joblib, scikit-learn
+Successfully installed joblib-0.15.1 numpy-1.18.1 scikit-learn-0.23.0 scipy-1.4.1 threadpoolctl-2.0.0
+Ignoring pip: markers 'python_version < "3"' don't match your environment
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/nix/avx512, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/nix/avx2, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/nix/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Collecting pandas
+Requirement already satisfied: numpy>=1.13.3 in /localscratch/yacine08.8277500.0/env/lib/python3.7/site-packages (from pandas) (1.18.1)
+Collecting pytz>=2017.2 (from pandas)
+Collecting python-dateutil>=2.6.1 (from pandas)
+Collecting six>=1.5 (from python-dateutil>=2.6.1->pandas)
+Installing collected packages: pytz, six, python-dateutil, pandas
+Successfully installed pandas-1.0.3 python-dateutil-2.8.1 pytz-2020.1 six-1.15.0
+/localscratch/yacine08.8277500.0/env/lib/python3.7/site-packages/sklearn/linear_model/_logistic.py:762: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. of ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  extra_warning_msg=_LOGISTIC_SOLVER_CONVERGENCE_MSG)
+{'weight': array([ 0.00000000e+00, -5.02535453e-01,  2.94287500e-01, -5.24422671e-01,
+        8.81838541e-01, -1.58089929e-01,  3.93972212e-01,  6.35076306e-01,
+       -1.14529832e+00,  5.23220891e-01,  1.78387522e-02, -1.03615777e-01,
+        1.27200706e-01, -2.36603391e-01, -4.12954748e-01, -5.80780973e-01,
+       -1.01149341e-01,  8.44949285e-01, -1.81560118e-01,  8.54414880e-01,
+       -1.12994308e-01,  1.29999425e-01,  7.82217271e-02, -1.29957666e-01,
+        2.44616178e-01, -4.48903714e-02, -2.61354534e-01,  8.25304201e-02,
+       -1.75842394e-01,  3.61065294e-02,  5.61626952e-02,  1.84293841e-01,
+       -1.38909749e-01, -6.68506985e-02, -2.08242210e-01, -6.96570893e-02,
+        2.02514494e-01,  1.22231310e-03,  1.56036649e-01, -5.43882605e-02,
+        2.91067778e-01, -1.00663571e+00,  3.83019162e-01, -2.49274856e-01,
+       -3.27553521e-01,  8.83418136e-02, -5.73523947e-01,  5.44844937e-01,
+       -2.24071579e-01,  6.90229520e-01, -6.03158284e-01, -1.05512855e+00,
+        3.18671266e-01,  5.76661458e-01, -9.38980205e-01,  7.26041266e-01,
+        1.09567333e-01, -8.49915629e-01, -3.91739672e-01, -6.39273022e-02,
+        2.10089609e-01,  8.00696622e-02, -1.37955612e-01, -8.66105597e-02,
+        7.85028772e-02,  1.10814668e-01,  3.16508157e-02, -1.91688179e-01,
+        4.27378102e-02, -4.80302264e-02,  2.82363571e-01, -6.96189462e-02,
+        3.52527239e-03,  1.81217840e-01, -1.75084622e-01,  1.52662539e-01,
+        6.63529121e-02, -1.88548558e-01, -3.27996878e-02, -1.69899382e-01,
+        2.30908682e-01,  2.83039573e-01,  4.84120620e-01, -2.33074234e-02,
+       -5.08704417e-01,  8.08699959e-01,  2.85562698e-01, -5.56246125e-01,
+       -8.59144691e-01, -1.15810634e-02,  5.54882054e-01,  2.62474778e-01,
+       -3.84677147e-01,  1.98013500e-01, -4.01547830e-02, -5.99742638e-01,
+        2.14571258e-01,  1.38789630e-01,  1.37558298e-01,  1.38575191e-01,
+       -2.12759341e-01,  4.51084029e-02,  7.16393684e-02,  1.10818154e-01,
+       -1.90748380e-01, -7.02819774e-02, -2.12055142e-01,  2.31570430e-01,
+       -1.85747388e-01,  2.14583125e-01,  1.29384794e-01,  4.18847063e-02,
+        1.96307475e-02,  1.75747207e-01, -2.82899316e-02, -9.70864438e-03,
+       -1.94615687e-01, -8.51749393e-02,  1.16080385e-01, -3.97213808e-01,
+       -8.07876406e-02, -5.60278165e-01, -8.69052080e-02,  1.89858936e-01,
+       -2.26109276e-01,  6.38006735e-01,  1.36453547e-01,  1.50087339e-01,
+        1.89835712e-01, -8.65404076e-01, -5.28139811e-01, -3.14699292e-01,
+        2.21978485e-01, -8.99682400e-01,  1.52383740e+00,  1.19428916e+00,
+       -4.00790932e-01, -9.76065863e-02,  9.80015338e-02,  2.34399055e-01,
+        1.78509040e-01,  5.78383441e-02, -8.87958184e-02,  9.64187178e-02,
+       -2.46259797e-01, -2.14010154e-02,  7.08280343e-02, -1.64376392e-01,
+       -9.94692739e-02,  4.77209997e-02,  1.59700626e-01, -2.27644142e-02,
+       -1.94989076e-03,  3.52599371e-01, -3.12172568e-01, -7.54133856e-02,
+       -2.41979530e-02]), 'name': ['type', 'fp1_delta_power', 'fp2_delta_power', 'fz_delta_power', 'f3_delta_power', 'f4_delta_power', 'f7_delta_power', 'f8_delta_power', 'cz_delta_power', 'c3_delta_power', 'c4_delta_power', 't3_delta_power', 't4_delta_power', 't5_delta_power', 't6_delta_power', 'pz_delta_power', 'p3_delta_power', 'p4_delta_power', 'o1_delta_power', 'o2_delta_power', 'peak_freq_delta', 'fp1_delta_wpli', 'fp2_delta_wpli', 'fz_delta_wpli', 'f3_delta_wpli', 'f4_delta_wpli', 'f7_delta_wpli', 'f8_delta_wpli', 'cz_delta_wpli', 'c3_delta_wpli', 'c4_delta_wpli', 't3_delta_wpli', 't4_delta_wpli', 't5_delta_wpli', 't6_delta_wpli', 'pz_delta_wpli', 'p3_delta_wpli', 'p4_delta_wpli', 'o1_delta_wpli', 'o2_delta_wpli', 'fp1_theta_power', 'fp2_theta_power', 'fz_theta_power', 'f3_theta_power', 'f4_theta_power', 'f7_theta_power', 'f8_theta_power', 'cz_theta_power', 'c3_theta_power', 'c4_theta_power', 't3_theta_power', 't4_theta_power', 't5_theta_power', 't6_theta_power', 'pz_theta_power', 'p3_theta_power', 'p4_theta_power', 'o1_theta_power', 'o2_theta_power', 'peak_freq_theta', 'fp1_theta_wpli', 'fp2_theta_wpli', 'fz_theta_wpli', 'f3_theta_wpli', 'f4_theta_wpli', 'f7_theta_wpli', 'f8_theta_wpli', 'cz_theta_wpli', 'c3_theta_wpli', 'c4_theta_wpli', 't3_theta_wpli', 't4_theta_wpli', 't5_theta_wpli', 't6_theta_wpli', 'pz_theta_wpli', 'p3_theta_wpli', 'p4_theta_wpli', 'o1_theta_wpli', 'o2_theta_wpli', 'fp1_alpha_power', 'fp2_alpha_power', 'fz_alpha_power', 'f3_alpha_power', 'f4_alpha_power', 'f7_alpha_power', 'f8_alpha_power', 'cz_alpha_power', 'c3_alpha_power', 'c4_alpha_power', 't3_alpha_power', 't4_alpha_power', 't5_alpha_power', 't6_alpha_power', 'pz_alpha_power', 'p3_alpha_power', 'p4_alpha_power', 'o1_alpha_power', 'o2_alpha_power', 'peak_freq_alpha', 'fp1_alpha_wpli', 'fp2_alpha_wpli', 'fz_alpha_wpli', 'f3_alpha_wpli', 'f4_alpha_wpli', 'f7_alpha_wpli', 'f8_alpha_wpli', 'cz_alpha_wpli', 'c3_alpha_wpli', 'c4_alpha_wpli', 't3_alpha_wpli', 't4_alpha_wpli', 't5_alpha_wpli', 't6_alpha_wpli', 'pz_alpha_wpli', 'p3_alpha_wpli', 'p4_alpha_wpli', 'o1_alpha_wpli', 'o2_alpha_wpli', 'fp1_beta_power', 'fp2_beta_power', 'fz_beta_power', 'f3_beta_power', 'f4_beta_power', 'f7_beta_power', 'f8_beta_power', 'cz_beta_power', 'c3_beta_power', 'c4_beta_power', 't3_beta_power', 't4_beta_power', 't5_beta_power', 't6_beta_power', 'pz_beta_power', 'p3_beta_power', 'p4_beta_power', 'o1_beta_power', 'o2_beta_power', 'peak_freq_beta', 'fp1_beta_wpli', 'fp2_beta_wpli', 'fz_beta_wpli', 'f3_beta_wpli', 'f4_beta_wpli', 'f7_beta_wpli', 'f8_beta_wpli', 'cz_beta_wpli', 'c3_beta_wpli', 'c4_beta_wpli', 't3_beta_wpli', 't4_beta_wpli', 't5_beta_wpli', 't6_beta_wpli', 'pz_beta_wpli', 'p3_beta_wpli', 'p4_beta_wpli', 'o1_beta_wpli', 'o2_beta_wpli']}
+Num Weights: 
+157
+Num Names: 
+157
+Features:
+Feature type has weights: 0.0
+Feature fp1_delta_power has weights: -0.5025354528545662
+Feature fp2_delta_power has weights: 0.29428750009216936
+Feature fz_delta_power has weights: -0.5244226714414326
+Feature f3_delta_power has weights: 0.8818385409773173
+Feature f4_delta_power has weights: -0.15808992922387294
+Feature f7_delta_power has weights: 0.39397221246629927
+Feature f8_delta_power has weights: 0.6350763055857243
+Feature cz_delta_power has weights: -1.1452983151247367
+Feature c3_delta_power has weights: 0.5232208914539287
+Feature c4_delta_power has weights: 0.017838752151790583
+Feature t3_delta_power has weights: -0.10361577730544952
+Feature t4_delta_power has weights: 0.12720070637834985
+Feature t5_delta_power has weights: -0.236603391007138
+Feature t6_delta_power has weights: -0.4129547476612151
+Feature pz_delta_power has weights: -0.5807809734991829
+Feature p3_delta_power has weights: -0.10114934116877874
+Feature p4_delta_power has weights: 0.8449492849636987
+Feature o1_delta_power has weights: -0.1815601184043022
+Feature o2_delta_power has weights: 0.8544148802090131
+Feature peak_freq_delta has weights: -0.11299430786600026
+Feature fp1_delta_wpli has weights: 0.12999942478035384
+Feature fp2_delta_wpli has weights: 0.07822172710713682
+Feature fz_delta_wpli has weights: -0.12995766560744615
+Feature f3_delta_wpli has weights: 0.24461617832578703
+Feature f4_delta_wpli has weights: -0.04489037137182425
+Feature f7_delta_wpli has weights: -0.2613545342900726
+Feature f8_delta_wpli has weights: 0.0825304201399359
+Feature cz_delta_wpli has weights: -0.17584239366118862
+Feature c3_delta_wpli has weights: 0.036106529391248234
+Feature c4_delta_wpli has weights: 0.056162695228370405
+Feature t3_delta_wpli has weights: 0.18429384116350575
+Feature t4_delta_wpli has weights: -0.1389097493317503
+Feature t5_delta_wpli has weights: -0.06685069848569754
+Feature t6_delta_wpli has weights: -0.2082422098058089
+Feature pz_delta_wpli has weights: -0.06965708928871821
+Feature p3_delta_wpli has weights: 0.20251449401745708
+Feature p4_delta_wpli has weights: 0.0012223130970311976
+Feature o1_delta_wpli has weights: 0.15603664890578584
+Feature o2_delta_wpli has weights: -0.05438826048858025
+Feature fp1_theta_power has weights: 0.29106777843060483
+Feature fp2_theta_power has weights: -1.006635709635357
+Feature fz_theta_power has weights: 0.3830191615535797
+Feature f3_theta_power has weights: -0.24927485602560417
+Feature f4_theta_power has weights: -0.327553520803813
+Feature f7_theta_power has weights: 0.08834181360897876
+Feature f8_theta_power has weights: -0.5735239472042425
+Feature cz_theta_power has weights: 0.5448449366188031
+Feature c3_theta_power has weights: -0.2240715787682743
+Feature c4_theta_power has weights: 0.6902295203331734
+Feature t3_theta_power has weights: -0.6031582839780524
+Feature t4_theta_power has weights: -1.0551285531928725
+Feature t5_theta_power has weights: 0.31867126575220306
+Feature t6_theta_power has weights: 0.5766614584521147
+Feature pz_theta_power has weights: -0.9389802054030455
+Feature p3_theta_power has weights: 0.7260412661210468
+Feature p4_theta_power has weights: 0.10956733281292404
+Feature o1_theta_power has weights: -0.8499156285385804
+Feature o2_theta_power has weights: -0.3917396722320541
+Feature peak_freq_theta has weights: -0.06392730219874646
+Feature fp1_theta_wpli has weights: 0.21008960914209734
+Feature fp2_theta_wpli has weights: 0.08006966223778764
+Feature fz_theta_wpli has weights: -0.13795561176857019
+Feature f3_theta_wpli has weights: -0.08661055973166143
+Feature f4_theta_wpli has weights: 0.07850287719753603
+Feature f7_theta_wpli has weights: 0.11081466786397948
+Feature f8_theta_wpli has weights: 0.031650815700296674
+Feature cz_theta_wpli has weights: -0.19168817948560077
+Feature c3_theta_wpli has weights: 0.04273781021944511
+Feature c4_theta_wpli has weights: -0.0480302264134615
+Feature t3_theta_wpli has weights: 0.28236357096366355
+Feature t4_theta_wpli has weights: -0.06961894624577766
+Feature t5_theta_wpli has weights: 0.003525272390996629
+Feature t6_theta_wpli has weights: 0.18121783998204744
+Feature pz_theta_wpli has weights: -0.1750846216468817
+Feature p3_theta_wpli has weights: 0.15266253932548768
+Feature p4_theta_wpli has weights: 0.06635291206721448
+Feature o1_theta_wpli has weights: -0.18854855842777832
+Feature o2_theta_wpli has weights: -0.03279968776585707
+Feature fp1_alpha_power has weights: -0.16989938194544474
+Feature fp2_alpha_power has weights: 0.23090868230147538
+Feature fz_alpha_power has weights: 0.28303957321172984
+Feature f3_alpha_power has weights: 0.4841206204543611
+Feature f4_alpha_power has weights: -0.023307423364308327
+Feature f7_alpha_power has weights: -0.5087044173544824
+Feature f8_alpha_power has weights: 0.8086999589893902
+Feature cz_alpha_power has weights: 0.2855626979413209
+Feature c3_alpha_power has weights: -0.5562461254369178
+Feature c4_alpha_power has weights: -0.8591446911619877
+Feature t3_alpha_power has weights: -0.011581063400367691
+Feature t4_alpha_power has weights: 0.5548820535226229
+Feature t5_alpha_power has weights: 0.2624747777840799
+Feature t6_alpha_power has weights: -0.38467714670139275
+Feature pz_alpha_power has weights: 0.19801349982500913
+Feature p3_alpha_power has weights: -0.040154782983796045
+Feature p4_alpha_power has weights: -0.5997426384491247
+Feature o1_alpha_power has weights: 0.21457125754125655
+Feature o2_alpha_power has weights: 0.13878963010050716
+Feature peak_freq_alpha has weights: 0.1375582976119522
+Feature fp1_alpha_wpli has weights: 0.13857519059386414
+Feature fp2_alpha_wpli has weights: -0.21275934123158638
+Feature fz_alpha_wpli has weights: 0.04510840288101114
+Feature f3_alpha_wpli has weights: 0.07163936842496828
+Feature f4_alpha_wpli has weights: 0.11081815382766533
+Feature f7_alpha_wpli has weights: -0.19074837961105404
+Feature f8_alpha_wpli has weights: -0.07028197737348907
+Feature cz_alpha_wpli has weights: -0.21205514237368275
+Feature c3_alpha_wpli has weights: 0.23157042976381276
+Feature c4_alpha_wpli has weights: -0.18574738798483445
+Feature t3_alpha_wpli has weights: 0.21458312503022672
+Feature t4_alpha_wpli has weights: 0.1293847938835101
+Feature t5_alpha_wpli has weights: 0.04188470626895327
+Feature t6_alpha_wpli has weights: 0.019630747547785928
+Feature pz_alpha_wpli has weights: 0.17574720727822848
+Feature p3_alpha_wpli has weights: -0.028289931575026767
+Feature p4_alpha_wpli has weights: -0.00970864437999443
+Feature o1_alpha_wpli has weights: -0.19461568681375832
+Feature o2_alpha_wpli has weights: -0.0851749393300512
+Feature fp1_beta_power has weights: 0.11608038469349168
+Feature fp2_beta_power has weights: -0.3972138075321952
+Feature fz_beta_power has weights: -0.08078764064976168
+Feature f3_beta_power has weights: -0.5602781645016826
+Feature f4_beta_power has weights: -0.08690520802402596
+Feature f7_beta_power has weights: 0.18985893642763624
+Feature f8_beta_power has weights: -0.2261092764154837
+Feature cz_beta_power has weights: 0.638006735130995
+Feature c3_beta_power has weights: 0.13645354748396218
+Feature c4_beta_power has weights: 0.15008733881435143
+Feature t3_beta_power has weights: 0.18983571214689113
+Feature t4_beta_power has weights: -0.8654040762088147
+Feature t5_beta_power has weights: -0.5281398105315935
+Feature t6_beta_power has weights: -0.3146992923938037
+Feature pz_beta_power has weights: 0.2219784852968475
+Feature p3_beta_power has weights: -0.8996824003905729
+Feature p4_beta_power has weights: 1.523837404832299
+Feature o1_beta_power has weights: 1.194289156151279
+Feature o2_beta_power has weights: -0.40079093213976796
+Feature peak_freq_beta has weights: -0.09760658633558583
+Feature fp1_beta_wpli has weights: 0.09800153377051023
+Feature fp2_beta_wpli has weights: 0.23439905522435397
+Feature fz_beta_wpli has weights: 0.1785090397582738
+Feature f3_beta_wpli has weights: 0.05783834414272755
+Feature f4_beta_wpli has weights: -0.0887958183889414
+Feature f7_beta_wpli has weights: 0.09641871782094764
+Feature f8_beta_wpli has weights: -0.24625979708263854
+Feature cz_beta_wpli has weights: -0.02140101542647369
+Feature c3_beta_wpli has weights: 0.07082803433525323
+Feature c4_beta_wpli has weights: -0.16437639179255428
+Feature t3_beta_wpli has weights: -0.09946927388399354
+Feature t4_beta_wpli has weights: 0.047720999659711376
+Feature t5_beta_wpli has weights: 0.15970062574921162
+Feature t6_beta_wpli has weights: -0.022764414198262167
+Feature pz_beta_wpli has weights: -0.001949890755396054
+Feature p3_beta_wpli has weights: 0.3525993712610435
+Feature p4_beta_wpli has weights: -0.31217256774335705
+Feature o1_beta_wpli has weights: -0.07541338557833216
+Feature o2_beta_wpli has weights: -0.024197953024983815

@@ -1,51 +1,28 @@
-from math import floor
 import pickle
 
 # Data manipulation
 import numpy as np
-import pandas as pd
-
-from sklearn.utils import resample
 
 # Library import
-from ml_tools.classification import classify_loso
-from ml_tools.pre_processing import pre_process
-from ml_tools.classification import bootstrap_interval
-
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import StandardScaler
-from sklearn.impute import SimpleImputer
-from sklearn.svm import SVC
-
-from math import floor
-
-# Data manipulation
-import numpy as np
-import pandas as pd
-
-from sklearn.utils import resample
-
-# Library import
-from ml_tools.classification import classify_loso
 from ml_tools.pre_processing import pre_process
 
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.impute import SimpleImputer
-from sklearn.svm import SVC
+
 from sklearn.svm import LinearSVC
 from sklearn.linear_model import LogisticRegression
 
+# Configuration for this experiment
 import config as cfg
 
 
 # Setup the experiment to test the above function
-input_filename = '/lustre03/project/6010672/yacine08/eeg_pain_result/features_all.csv'
 output_dir = '/lustre03/project/6010672/yacine08/eeg_pain_result/'
 features_filename = output_dir + 'features.pickle'
 
 # TO MODIFY!
-#clf = LinearSVC(C=10) #Both
+# clf = LinearSVC(C=10) #Both
 clf = LogisticRegression() #healthy
 pipe = Pipeline([
     ('imputer', SimpleImputer(missing_values=np.nan, strategy='mean')),
@@ -53,7 +30,7 @@ pipe = Pipeline([
     ('SVM', clf)])
 
 # Training and bootstrap interval generation
-X, y, group, df = pre_process(input_filename, cfg.PARTICIPANT_TYPE)
+X, y, group, df = pre_process(cfg.DF_FILE_PATH, cfg.PARTICIPANT_TYPE)
 
 # Fitting the classifier with all the data
 pipe.fit(X, y)
@@ -62,7 +39,6 @@ feature_weights = clf.coef_[0]
 
 features = df.drop(['id', 'is_hot'], axis=1)
 feature_names = list(features.columns.values)
-
 
 # Save the data to disk
 features_file = open(features_filename, 'ab')

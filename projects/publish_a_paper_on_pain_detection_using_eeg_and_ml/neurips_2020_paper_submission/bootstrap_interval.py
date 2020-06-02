@@ -40,11 +40,10 @@ import config as cfg
 
 
 # Setup the experiment to test the above function
-input_filename = '/lustre03/project/6010672/yacine08/eeg_pain_result/features_all.csv'
 output_dir = '/lustre03/project/6010672/yacine08/eeg_pain_result/'
 bootstrap_filename = output_dir + 'bootstrap.pickle'
 
-#clf = LinearSVC(C=10) #Both
+# clf = LinearSVC(C=10) #Both
 clf = LogisticRegression() #healthy
 pipe = Pipeline([
     ('imputer', SimpleImputer(missing_values=np.nan, strategy='mean')),
@@ -52,21 +51,21 @@ pipe = Pipeline([
     ('SVM', clf)])
 
 # Training and bootstrap interval generation
-X, y, group, df = pre_process(input_filename, cfg.PARTICIPANT_TYPE)
-acc_distribution, acc_interval = bootstrap_interval(X, y, group, pipe, num_resample=1000, p_value=0.05)
+X, y, group, df = pre_process(cfg.DF_FILE_PATH, cfg.PARTICIPANT_TYPE)
+f1_distribution, f1_interval = bootstrap_interval(X, y, group, pipe, num_resample=1000, p_value=0.05)
 
 # Save the data to disk
 bootstrap_file = open(bootstrap_filename, 'ab')
 bootstrap_data = {
-    'distribution': acc_distribution,
-    'interval': acc_interval
+    'distribution': f1_distribution,
+    'interval': f1_interval
 }
 pickle.dump(bootstrap_data, bootstrap_file)
 bootstrap_file.close()
 
 # Print out some high level sumarry
-print("Accuracy Distribution:")
-print(acc_distribution)
-print(f"Mean: {np.mean(acc_distribution)} and std: {np.std(acc_distribution)}")
+print("F1 Distribution:")
+print(f1_distribution)
+print(f"Mean: {np.mean(f1_distribution)} and std: {np.std(f1_distribution)}")
 print("Bootstrap Interval")
-print(acc_interval)
+print(f1_interval)
