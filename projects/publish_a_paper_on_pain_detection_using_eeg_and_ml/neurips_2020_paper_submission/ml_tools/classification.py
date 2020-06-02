@@ -234,6 +234,6 @@ def bootstrap_classify(X, y, group, clf, sample_id,):
     sample_X, sample_y, sample_group = resample(X, y, group)
 
     # Classify and get the results
-    f1s = classify_loso(sample_X, sample_y, sample_group, clf)
+    f1s, cms = classify_loso(sample_X, sample_y, sample_group, clf)
 
     return np.mean(f1s)

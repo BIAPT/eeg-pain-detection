@@ -1,38 +1,16 @@
-from math import floor
 import pickle
 
 # Data manipulation
 import numpy as np
-import pandas as pd
-
-from sklearn.utils import resample
 
 # Library import
-from ml_tools.classification import classify_loso
-from ml_tools.pre_processing import pre_process
 from ml_tools.classification import bootstrap_interval
-
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import StandardScaler
-from sklearn.impute import SimpleImputer
-from sklearn.svm import SVC
-
-from math import floor
-
-# Data manipulation
-import numpy as np
-import pandas as pd
-
-from sklearn.utils import resample
-
-# Library import
-from ml_tools.classification import classify_loso
 from ml_tools.pre_processing import pre_process
 
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.impute import SimpleImputer
-from sklearn.svm import SVC
+
 from sklearn.svm import LinearSVC
 from sklearn.linear_model import LogisticRegression
 
@@ -43,8 +21,11 @@ import config as cfg
 output_dir = '/lustre03/project/6010672/yacine08/eeg_pain_result/'
 bootstrap_filename = output_dir + 'bootstrap.pickle'
 
-# clf = LinearSVC(C=10) #Both
-clf = LogisticRegression() #healthy
+if cfg.PARTICIPANT_TYPE == "HEALTHY":
+    clf = LogisticRegression()  # healthy
+else:
+    clf = LinearSVC(C=10) # Both and MSK
+
 pipe = Pipeline([
     ('imputer', SimpleImputer(missing_values=np.nan, strategy='mean')),
     ('scaler', StandardScaler()),
