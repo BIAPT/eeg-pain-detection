@@ -42,7 +42,7 @@ def classify_loso(X, y, group, clf):
     """
     logo = LeaveOneGroupOut()
 
-    f1s = []
+    accuracies = []
     cms = np.zeros((2, 2))
     for train_index, test_index in logo.split(X, y, group):
         X_train, X_test = X[train_index], X[test_index]
@@ -52,12 +52,12 @@ def classify_loso(X, y, group, clf):
             clf.fit(X_train, y_train)
         y_hat = clf.predict(X_test)
 
-        f1 = f1_score(y_test, y_hat)
+        acc = accuracy_score(y_test, y_hat)
         cm = confusion_matrix(y_test, y_hat)
 
-        f1s.append(f1)
+        accuracies.append(acc)
         cms = np.add(cms, cm)
-    return f1s, cms
+    return accuracies, cms
 
 
 def classify_loso_model_selection(X, y, group, gs):
@@ -127,11 +127,11 @@ def permutation_test(X, y, group, clf, num_permutation=1000):
     train_test_splits = logo.split(X, y, group)
 
     with joblib.parallel_backend('loky'):
-        (f1s, permutation_scores, p_value) = permutation_test_score(clf, X, y, groups=group, cv=train_test_splits,
-                                                                        n_permutations=num_permutation, scoring='f1',
+        (accuracies, permutation_scores, p_value) = permutation_test_score(clf, X, y, groups=group, cv=train_test_splits,
+                                                                        n_permutations=num_permutation,
                                                                         verbose=num_permutation, n_jobs=-1)
 
-    return f1s, permutation_scores, p_value
+    return accuracies, permutation_scores, p_value
 
 
 def bootstrap_interval(X, y, group, clf, num_resample=1000, p_value=0.05):
@@ -158,17 +158,18 @@ def bootstrap_interval(X, y, group, clf, num_resample=1000, p_value=0.05):
     results = [pool.apply_async(bootstrap_classify, args=(X, y, group, clf, sample_id,)) for sample_id in range(num_resample)]
 
     # Unpack the results
-    f1_distribution = [p.get() for p in results]
+    acc_distribution = [p.get() for p in results]
 
     # Sort the results
-    f1_distribution.sort()
+    acc_distribution.sort()
 
     # Set the confidence interval at the right index
     lower_index = floor(num_resample * (p_value / 2))
     upper_index = floor(num_resample * (1 - (p_value / 2)))
-    f1_interval = f1_distribution[lower_index], f1_distribution[upper_index]
+    acc_interval = acc_distribution[lower_index], acc_distribution[upper_index]
 
-    return f1_distribution, f1_interval
+    return acc_distribution, acc_interval
+
 
 # Create LOSO Grid Search to search amongst many classifier
 class DummyEstimator(BaseEstimator):
@@ -207,7 +208,7 @@ def create_gridsearch_pipeline():
     
 
     # We will try to use as many processor as possible for the gridsearch
-    gs = GridSearchCV(pipe, search_space, cv=LeaveOneGroupOut(), scoring='f1', n_jobs=-1)
+    gs = GridSearchCV(pipe, search_space, cv=LeaveOneGroupOut(), n_jobs=-1)
     return gs
 
 def save_model(gs, model_file):
@@ -234,6 +235,6 @@ def bootstrap_classify(X, y, group, clf, sample_id,):
     sample_X, sample_y, sample_group = resample(X, y, group)
 
     # Classify and get the results
-    f1s, cms = classify_loso(sample_X, sample_y, sample_group, clf)
+    accuracies, cms = classify_loso(sample_X, sample_y, sample_group, clf)
 
-    return np.mean(f1s)
+    return np.mean(accuracies)
