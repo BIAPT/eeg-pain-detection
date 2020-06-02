@@ -51,7 +51,7 @@ features_data = {
 pickle.dump(features_data, features_file)
 features_file.close()
 
-# Print out some high level sumary
+# Print out some high level summary
 print(features_data)
 print("Num Weights: ")
 print(len(feature_weights))
