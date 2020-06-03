@@ -3,12 +3,20 @@ import pickle
 
 from ml_tools.classification import classify_loso_model_selection
 from ml_tools.classification import create_gridsearch_pipeline
-from ml_tools.classification import save_model
 from ml_tools.pre_processing import pre_process
 
 import config as cfg
 
+
 def print_summary(accuracies, group, df):
+    """
+    Helper function to print a summary of a classifier performance
+    :param accuracies: a list of the accuracy obtained across fold (participant)
+    :param group: ids of the participants windows
+    :param df: dataframe containing all the data about the participant
+    :return: None
+    """
+
     p_ids = np.unique(group)
     print("Accuracies: ")
     for accuracy, p_id in zip(accuracies, p_ids):
@@ -26,7 +34,8 @@ def print_summary(accuracies, group, df):
 if __name__ == '__main__':
 
     # Global Experimental Variable
-    gs_filename = cfg.OUTPUT_DIR + 'trained_gs.pickle'
+    performance_filename = cfg.OUTPUT_DIR + 'performance.pickle'
+
     acc_filename = cfg.OUTPUT_DIR + 'accuracies_result.pickle'
     f1_filename = cfg.OUTPUT_DIR + 'f1s_result.pickle'
     cm_filename = cfg.OUTPUT_DIR + 'cms_result.pickle'
@@ -40,21 +49,17 @@ if __name__ == '__main__':
     # Print out the summary in the console
     print_summary(accuracies, group, df)
 
-    # Create the files and save them
-    save_model(gs, gs_filename)
+    # Saving the performance metrics
+    performance = {
+        'accuracies': accuracies,
+        'f1s': f1s,
+        'cms': cms
+    }
+    performance_file = open(performance_filename, 'ab')
+    pickle.dump(performance, performance_file)
+    performance_file.close()
 
-    accuracy_file = open(acc_filename, 'ab')
-    pickle.dump(accuracies, accuracy_file)
-    accuracy_file.close()
-
-    f1_file = open(f1_filename, 'ab')
-    pickle.dump(f1s, f1_file)
-    f1_file.close()
-
-    cm_file = open(cm_filename, 'ab')
-    pickle.dump(cms, cm_file)
-    cm_file.close()
-
+    # Saving the list of best parameters found so far
     best_params_file = open(best_params_filename, 'ab')
     pickle.dump(best_params, best_params_file)
     best_params_file.close()
