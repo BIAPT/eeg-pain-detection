@@ -21,10 +21,10 @@ import config as cfg
 output_dir = '/lustre03/project/6010672/yacine08/eeg_pain_result/'
 features_filename = output_dir + 'features.pickle'
 
-if cfg.PARTICIPANT_TYPE == "HEALTHY":
-    clf = LogisticRegression()  # healthy
+if cfg.PARTICIPANT_TYPE == "HEALTHY" or cfg.PARTICIPANT_TYPE == "BOTH":
+    clf = LogisticRegression()  # healthy and BOTH
 else:
-    clf = LinearSVC(C=10) # Both and MSK
+    clf = LinearSVC(C=10) # MSK
 
 pipe = Pipeline([
     ('imputer', SimpleImputer(missing_values=np.nan, strategy='mean')),
