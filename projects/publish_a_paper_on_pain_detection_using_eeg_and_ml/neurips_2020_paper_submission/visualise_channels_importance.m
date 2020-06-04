@@ -2,6 +2,7 @@
 % The goal of this script is to generate the topographic maps of their
 % importance for the classification of pain/no-pain
 
+PARTICIPANT_TYPE = "MSK";
 FULL_HEADSET_LOCATION = "/home/yacine/Documents/BIAPT/eeg-pain-detection/projects/.data/full_headset_location.mat";
 FEATURE_WEIGHT_LOCATION = "/home/yacine/Documents/BIAPT/eeg_pain_result/channels_importance.csv";
 
@@ -10,25 +11,26 @@ channel_location = data.max_location;
 channel_weights = readtable(FEATURE_WEIGHT_LOCATION);
 
 % Healthy
-weights = get_weight_type(channel_weights, "BOTH");
-plot_topo_map(weights, "Weight per Channel both", channel_location, 'hot');
+weights = get_weight_type(channel_weights, PARTICIPANT_TYPE);
+plot_topo_map(weights, strcat("Weight per Channel ",PARTICIPANT_TYPE), channel_location, 'hot');
 
 
 function weight = get_weight_type(channel_weights, type)
+% Helper function to get all the realtive weights for a given participant
     weight = [];
     for i = 1:height(channel_weights)
        if strcmp(channel_weights.participant_type{i}, type)
-           weight = [weight, channel_weights.weight(i)];
+           weight = [weight, channel_weights.relative_weight(i)];
        end
     end
 end
 
 function plot_topo_map(weight, title_name, channels_location, color)
-%PLOT_MOTIF Summary of this function goes here
-%   The frequency here is for a single motif
+% Helper function to plot the topographic map using eeglab topoplot
     figure;
     title(title_name);
     topoplot(weight,channels_location,'maplimits','absmax', 'electrodes', 'off');
     colorbar;
     colormap(color);
+    caxis([min(weight) max(weight)]);
 end
