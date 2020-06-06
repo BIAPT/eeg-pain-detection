@@ -12,7 +12,7 @@ channel_weights = readtable(FEATURE_WEIGHT_LOCATION);
 
 % Healthy
 weights = get_weight_type(channel_weights, PARTICIPANT_TYPE);
-plot_topo_map(weights, strcat("Weight per Channel ",PARTICIPANT_TYPE), channel_location, 'hot');
+plot_topo_map(weights, strcat("Relative Weight per Channel Msk"), channel_location, 'hot');
 
 
 function weight = get_weight_type(channel_weights, type)

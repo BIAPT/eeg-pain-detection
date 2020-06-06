@@ -9,8 +9,6 @@
 #SBATCH --mail-user=yacine.mahdid@mail.mcgill.ca 
 #SBATCH --mail-type=ALL
 
-# Parameter it accept: $OUT_PATH, $USER and $SLURM_JOB_ID
-
 # Choose a version of MATLAB by loading a module:
 module load matlab/2018a
 
@@ -18,7 +16,7 @@ module load matlab/2018a
 mkdir -p /scratch/$USER/$SLURM_JOB_ID
 
 # Remove -singleCompThread below if you are using parallel commands:
-srun matlab -nodisplay -r "generate_features"
+srun matlab -nodisplay -r "generate_features" # will run on at most 40 cores
 
 # Cleanup
 rm -rf /scratch/$USER/$SLURM_JOB_ID
