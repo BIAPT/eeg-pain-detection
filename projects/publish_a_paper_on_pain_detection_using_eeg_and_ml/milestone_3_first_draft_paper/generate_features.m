@@ -13,10 +13,10 @@ addpath(genpath(NEUROALGO_PATH));
 distcomp.feature( 'LocalUseMpiexec', false ) % This was because of some bug happening in the cluster
 
 % Create a "local" cluster object
-local_cluster = parcluster('local')
+local_cluster = parcluster('local');
 
 % Modify the JobStorageLocation to $SLURM_TMPDIR
-pc.JobStorageLocation = strcat('/scratch/YourUsername/', getenv('SLURM_JOB_ID'))
+pc.JobStorageLocation = strcat('/scratch/YourUsername/', getenv('SLURM_JOB_ID'));
 
 % Start the parallel pool
 parpool(local_cluster, NUM_CORE)
@@ -49,7 +49,6 @@ number_tapers = 3;
 % wPLI & dPLI Params
 number_surrogate = 20; % Number of surrogate wPLI to create
 p_value = 0.05; % the p value to make our test on
-
 
 % Permutation Entropy Params
 embedding_dimension = 5;

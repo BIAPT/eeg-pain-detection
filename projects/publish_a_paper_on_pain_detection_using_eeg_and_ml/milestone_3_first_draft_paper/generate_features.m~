@@ -13,10 +13,10 @@ addpath(genpath(NEUROALGO_PATH));
 distcomp.feature( 'LocalUseMpiexec', false ) % This was because of some bug happening in the cluster
 
 % Create a "local" cluster object
-local_cluster = parcluster('local')
+local_cluster = parcluster('local');
 
 % Modify the JobStorageLocation to $SLURM_TMPDIR
-pc.JobStorageLocation = strcat('/scratch/YourUsername/', getenv('SLURM_JOB_ID'))
+pc.JobStorageLocation = strcat('/scratch/YourUsername/', getenv('SLURM_JOB_ID'));
 
 % Start the parallel pool
 parpool(local_cluster, NUM_CORE)
@@ -49,7 +49,6 @@ number_tapers = 3;
 % wPLI & dPLI Params
 number_surrogate = 20; % Number of surrogate wPLI to create
 p_value = 0.05; % the p value to make our test on
-
 
 % Permutation Entropy Params
 embedding_dimension = 5;
@@ -125,14 +124,15 @@ parfor id = 3:length(directories)
             peak_frequency = result_sp.data.peak_frequency';
             
             % wPLI
-            result_wpli = na_wpli(recording, bandpass, WIN_SIZE, STEP_SIZE, number_surrogate, p_value);
             [pad_avg_wpli] = calculate_wpli(recording, bandpass, WIN_SIZE, STEP_SIZE, number_surrogate, p_value, max_location);
             
             % dPLI
-            result_dpli = na_dpli(recording, bandpass, WIN_SIZE, STEP_SIZE, number_surrogate, p_value);
             [pad_avg_dpli] = calculate_dpli(recording, bandpass, WIN_SIZE, STEP_SIZE, number_surrogate, p_value, max_location);
 
-            features = horzcat(features, pad_powers, peak_frequency, pad_avg_wpli, pad_avg_dpli);
+            % PE
+            [pad_pe] = calculate_pe(recording, win_size, step_size, bandpass, embedding_dimension, time_lag, max_location)
+            
+            features = horzcat(features, pad_powers, peak_frequency, pad_avg_wpli, pad_avg_dpli, pad_pe);
         end
         
          %% Write the features to file
@@ -259,11 +259,10 @@ function [pad_powers] = calculate_power(recording, win_size, step_size, bandpass
     end
 end
 
-function [pad_pe] = calculate_pe(recording, win_size, step_size, bandpass, max_location)
-    pe_struct = na_permutation_entropy(recording, alpha_band, window_size , step_size, embedding_dimension, time_lag);
-
+function [pad_pe] = calculate_pe(recording, win_size, step_size, bandpass, embedding_dimension, time_lag, max_location)
+    pe_struct = na_permutation_entropy(recording, bandpass, win_size , step_size, embedding_dimension, time_lag);
     location = pe_struct.metadata.channels_location;
-    pe = pe_struct.data.pe;
+    pe = pe_struct.data.normalized_permutation_entropy;
     
     [num_window, ~] = size(pe);
     pad_pe = zeros(num_window,length(max_location));
