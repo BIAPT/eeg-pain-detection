@@ -10,7 +10,8 @@ NUM_CORE = 40;
 addpath(genpath(NEUROALGO_PATH));
 
 % Disable this feature
-distcomp.feature( 'LocalUseMpiexec', false )
+distcomp.feature( 'LocalUseMpiexec', false ) % This was because of some bug happening in the cluster
+
 % Create a "local" cluster object
 local_cluster = parcluster('local')
 
@@ -45,7 +46,7 @@ STEP_SIZE = 10;
 time_bandwith_product = 2;
 number_tapers = 3;
 
-% wPLI Params
+% wPLI & dPLI Params
 number_surrogate = 20; % Number of surrogate wPLI to create
 p_value = 0.05; % the p value to make our test on
 
@@ -121,8 +122,12 @@ parfor id = 3:length(directories)
             % wPLI
             result_wpli = na_wpli(recording, bandpass, WIN_SIZE, STEP_SIZE, number_surrogate, p_value);
             [pad_avg_wpli] = calculate_wpli(recording, bandpass, WIN_SIZE, STEP_SIZE, number_surrogate, p_value, max_location);
+            
+            % dPLI
+            result_dpli = na_dpli(recording, bandpass, WIN_SIZE, STEP_SIZE, number_surrogate, p_value);
+            [pad_avg_dpli] = calculate_dpli(recording, bandpass, WIN_SIZE, STEP_SIZE, number_surrogate, p_value, max_location);
 
-            features = horzcat(features, pad_powers, peak_frequency, pad_avg_wpli);
+            features = horzcat(features, pad_powers, peak_frequency, pad_avg_wpli, pad_avg_dpli);
         end
         
          %% Write the features to file
@@ -192,7 +197,14 @@ function write_header(OUT_FILE, header, bandpass_names, max_location)
             channel_label = max_location(c).labels;
             feature_label = sprintf("%s_%s_wpli",channel_label, bandpass_name);
             fprintf(file_id,'%s,', lower(feature_label)); 
-        end     
+        end
+        
+        % dPLI Across Channels
+        for c = 1:length(max_location)
+            channel_label = max_location(c).labels;
+            feature_label = sprintf("%s_%s_dpli",channel_label, bandpass_name);
+            fprintf(file_id,'%s,', lower(feature_label)); 
+        end
     end
 
     fprintf(file_id,"\n");
@@ -208,6 +220,18 @@ function [pad_avg_wpli] = calculate_wpli(recording, bandpass, win_size, step_siz
     pad_avg_wpli = zeros(num_window, length(max_location));
     for w = 1:num_window
        pad_avg_wpli(w,:) = pad_result(avg_wpli(w,:), location, max_location);
+    end
+end
+
+function [pad_avg_dpli] = calculate_dpli(recording, bandpass, win_size, step_size, number_surrogate, p_value, max_location)
+    result_dpli = na_dpli(recording, bandpass, win_size, step_size, number_surrogate, p_value);
+    location = result_dpli.metadata.channels_location;
+    avg_dpli = mean(result_dpli.data.dpli,3);
+    
+    [num_window,~] = size(avg_dpli);
+    pad_avg_dpli = zeros(num_window, length(max_location));
+    for w = 1:num_window
+       pad_avg_dpli(w,:) = pad_result(avg_dpli(w,:), location, max_location);
     end
 end
 

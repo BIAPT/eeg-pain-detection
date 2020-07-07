@@ -28,7 +28,7 @@ pipe = Pipeline([
     ('clf', clf)])
 
 # Train and do the permutaiton test
-gs = create_gridsearch_pipeline()
+#gs = create_gridsearch_pipeline()
 X, y, group, df = pre_process(cfg.DF_FILE_PATH, cfg.PARTICIPANT_TYPE)
 acc, perms, p_value = permutation_test(X, y, group, pipe, num_permutation=1000)
 
