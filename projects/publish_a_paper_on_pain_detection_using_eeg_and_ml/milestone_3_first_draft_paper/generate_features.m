@@ -54,6 +54,11 @@ p_value = 0.05; % the p value to make our test on
 embedding_dimension = 5;
 time_lag = 4;
 
+% Hub Location (HL)
+threshold = 0.10; % This is the threshold at which we binarize the graph
+a_degree = 1.0;
+a_bc = 0.0;
+
 data = load(FULL_HEADSET_LOCATION);
 max_location = data.max_location;
 
@@ -130,9 +135,12 @@ parfor id = 3:length(directories)
             [pad_avg_dpli] = calculate_dpli(recording, bandpass, WIN_SIZE, STEP_SIZE, number_surrogate, p_value, max_location);
 
             % PE
-            [pad_pe] = calculate_pe(recording, win_size, step_size, bandpass, embedding_dimension, time_lag, max_location)
+            [pad_pe] = calculate_pe(recording, WIN_SIZE, STEP_SIZE, bandpass, embedding_dimension, time_lag, max_location)
             
-            features = horzcat(features, pad_powers, peak_frequency, pad_avg_wpli, pad_avg_dpli, pad_pe);
+            % HL
+            [pad_hl] = calculate_hl(recording, WIN_SIZE, STEP_SIZE, bandpass, number_surrogate, p_value, threshold, a_degree, a_bc, max_location)
+            
+            features = horzcat(features, pad_powers, peak_frequency, pad_avg_wpli, pad_avg_dpli, pad_pe, pad_hl);
         end
         
          %% Write the features to file
@@ -217,6 +225,13 @@ function write_header(OUT_FILE, header, bandpass_names, max_location)
             feature_label = sprintf("%s_%s_pe",channel_label, bandpass_name);
             fprintf(file_id,'%s,', lower(feature_label)); 
         end
+        
+        % HL Across Channels
+        for c = 1:length(max_location)
+            channel_label = max_location(c).labels;
+            feature_label = sprintf("%s_%s_hl",channel_label, bandpass_name);
+            fprintf(file_id,'%s,', lower(feature_label)); 
+        end
     end
 
     fprintf(file_id,"\n");
@@ -256,6 +271,18 @@ function [pad_powers] = calculate_power(recording, win_size, step_size, bandpass
     pad_powers = zeros(num_window,length(max_location));
     for w = 1:num_window
         pad_powers(w,:) = pad_result(powers(w,:), location, max_location);
+    end
+end
+
+function [pad_hl] = calculate_hl(recording, win_size, step_size, bandpass, number_surrogate, p_value, threshold, a_degree, a_bc, max_location)
+    hl_struct = na_hub_location(recording, bandpass, win_size, step_size, number_surrogate, p_value, threshold, a_degree, a_bc);
+    location = hl_struct.metadata.channels_location;
+    hl_weights = hl_struct.data.hub_weights;
+    
+    [num_window, ~] = size(hl_weights);
+    pad_hl = zeros(num_window,length(max_location));
+    for w = 1:num_window
+        pad_hl(w,:) = pad_result(hl_weights(w,:), location, max_location);
     end
 end
 

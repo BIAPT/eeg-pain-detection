@@ -54,6 +54,11 @@ p_value = 0.05; % the p value to make our test on
 embedding_dimension = 5;
 time_lag = 4;
 
+% Hub Location (HL)
+threshold = 0.10; % This is the threshold at which we binarize the graph
+a_degree = 1.0;
+a_bc = 0.0;
+
 data = load(FULL_HEADSET_LOCATION);
 max_location = data.max_location;
 
@@ -131,6 +136,8 @@ parfor id = 3:length(directories)
 
             % PE
             [pad_pe] = calculate_pe(recording, win_size, step_size, bandpass, embedding_dimension, time_lag, max_location)
+            
+            % HL
             
             features = horzcat(features, pad_powers, peak_frequency, pad_avg_wpli, pad_avg_dpli, pad_pe);
         end
@@ -256,6 +263,18 @@ function [pad_powers] = calculate_power(recording, win_size, step_size, bandpass
     pad_powers = zeros(num_window,length(max_location));
     for w = 1:num_window
         pad_powers(w,:) = pad_result(powers(w,:), location, max_location);
+    end
+end
+
+function [pad_hl] = calculate_hl(recording, win_size, step_size, bandpass, max_location)
+    power_struct = na_topographic_distribution(recording, win_size, step_size, bandpass);
+    location = power_struct.metadata.channels_location;
+    hl_weights = power_struct.data.hub_weights;
+    
+    [num_window, ~] = size(hl_weights);
+    pad_hl = zeros(num_window,length(max_location));
+    for w = 1:num_window
+        pad_hl(w,:) = pad_result(hl_weights(w,:), location, max_location);
     end
 end
 
