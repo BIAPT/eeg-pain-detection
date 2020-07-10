@@ -24,8 +24,8 @@
 configuration = jsondecode(fileread('configuration.json'));
 
 %% BELUGA Setup
-NEUROALGO_PATH = "/lustre03/project/6010672/yacine08/NeuroAlgo";
-NUM_CORE = 40;
+NEUROALGO_PATH = configuration.neuro_algo_path;
+NUM_CORE = configuration.num_cores;
 
 % Add NA library to our path so that we can use it
 addpath(genpath(NEUROALGO_PATH));
@@ -44,9 +44,9 @@ parpool(local_cluster, NUM_CORE)
 
 %% Experiment Variable
 % Path 
-IN_DIR = "/lustre03/project/6010672/yacine08/eeg_pain_data/";
-FULL_HEADSET_LOCATION = "/lustre03/project/6010672/yacine08/eeg-pain-detection/projects/.data/full_headset_location.mat";
-OUT_FILE = strcat(OUT_DIR, "features_%s.csv");
+IN_DIR = configuration.in_dir;
+FULL_HEADSET_LOCATION = configuration.full_headset_location;
+OUT_FILE = strcat(configuration.out_dir, "features_%s.csv");
 
 % Global Experiment Variable
 rejected_participants = {
