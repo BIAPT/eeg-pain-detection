@@ -1,6 +1,8 @@
 # Pain Recognition with EEG
 In this project, we are analyzing 24 channels dry EEG data coming from the Shrinner Hospital in two patient population: Healthy and participant with MSK.
 
+Code written by Yacine Mahdid in 2020 from home during the Covid-19 pandemic.
+
 ## Table of Content
 - [Code Structure](#code-structure)
 
@@ -14,3 +16,6 @@ In this project, we are analyzing 24 channels dry EEG data coming from the Shrin
     - 3_first_draft_paper: Because of the neurips sumission we had a good start for a paper, we gained some ideas of what to change to make a full papper out of our analysis.
 - utils is where utility function (like plotting or reordering) are stored
 
+**If you want to reproduce the latest result you need to use the latest milestone**
+
+Starting at milestone 3 we decided to use a JSON file for holding the configuration since at that time we were using MATLAB and Python for the analysis and there was state shared between the two.
