@@ -139,7 +139,7 @@ parfor id = 3:length(directories)
             
             % HL
             [pad_hl] = calculate_hl(recording, WIN_SIZE, STEP_SIZE, bandpass, number_surrogate, p_value, threshold, a_degree, a_bc, max_location)
-            
+                       
             features = horzcat(features, pad_powers, peak_frequency, pad_avg_wpli, pad_avg_dpli, pad_pe, pad_hl);
         end
         
