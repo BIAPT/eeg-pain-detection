@@ -1,6 +1,25 @@
-%% Yacine Mahdid May 26
-% We basically needs to calculate Power, wPLI and peak frequency
-% the first two need to be calculated at delta, theta, alpha, beta
+%% Yacine Mahdid July 10
+% This generator will calculate the following feature:
+% - power
+% - wpli
+% - peak frequency 
+% - dpli
+% - permutation entropy
+% - hub location
+%
+% at the following frequency:
+% - delta
+% - theta
+% - alpha
+% - beta
+%
+% at the following epochs (sometime these are not present for the pariticpant):
+% - baseline
+% - first hot
+% - cold
+% - second hot
+%
+% for all the participants
 
 %% BELUGA Setup
 NEUROALGO_PATH = "/lustre03/project/6010672/yacine08/NeuroAlgo";
