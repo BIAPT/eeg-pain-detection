@@ -17,7 +17,7 @@
 % - baseline 
 % - first hot 
 % - cold
-% - second hot
+% - second hotYacine Mahdid
 %
 % for all the participants
 
@@ -25,7 +25,7 @@
 REPO_LOCATION = '/lustre03/project/6010672/yacine08/eeg-pain-detection/milestones/3_first_draft_paper';
 addpath(genpath(REPO_LOCATION)); % need to add the repo to path because matlab is dumb
 
-CONFIG_FILENAME = 'beluga_configuration.json';
+CONFIG_FILENAME = 'yacine_configuration.json';
 configuration = jsondecode(fileread(CONFIG_FILENAME));
 
 %% BELUGA Setup
@@ -54,6 +54,10 @@ end
 IN_DIR = configuration.in_dir;
 FULL_HEADSET_LOCATION = configuration.full_headset_location;
 OUT_FILE = strcat(configuration.out_dir, "features_%s.csv");
+OUT_LOG = strcat(configuration.out_dir, "logs_", num2str(now*10), ".csv"); 
+
+file_id = fopen(OUT_LOG,'w');
+fclose(file_id);
 
 header = ["id", "type", "state"];
 bandpass_names = {'delta','theta', 'alpha', 'beta'};
@@ -94,7 +98,7 @@ parfor id = 3:length(directories)
        % 0 in the state means its not a valid state
        % valid state includes: nopain, rest, hot1, cold, hot2
        if state == 0
-           continue
+          continue
        end
        
        %% Load data and calculate feature
@@ -106,6 +110,8 @@ parfor id = 3:length(directories)
             [features] = calculate_features(recording, features_params, bandpass_freqs, bandpass_names, max_location);
        catch
           disp(strcat("Problem with file: ", filename))
+          file_id = fopen(OUT_LOG,'a');
+          fpritnf(file_id, strcat("Problem with file: ", filename));
           continue;
        end
        
