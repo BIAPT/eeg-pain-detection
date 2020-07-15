@@ -35,7 +35,6 @@ NUM_CORE = configuration.num_cores;
 % Add NA library to our path so that we can use it
 addpath(genpath(NEUROALGO_PATH));
 
-
 % Disable this feature (CHECK IF NEEDED)
 if configuration.is_cluster == 1
     distcomp.feature( 'LocalUseMpiexec', false ) % This was because of some bug happening in the cluster
