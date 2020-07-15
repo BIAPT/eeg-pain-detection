@@ -14,14 +14,18 @@
 % - beta
 %
 % at the following epochs (sometime these are not present for the pariticpant):
-% - baseline
-% - first hot
+% - baseline 
+% - first hot 
+%
+% TODO
 % - cold
 % - second hot
 %
 % for all the participants
 
-CONFIG_FILENAME = 'configuration.json';
+CONFIG_FILENAME = 'yacine_configuration.json';
+IS_CLUSTER = 0;
+
 configuration = jsondecode(fileread(CONFIG_FILENAME));
 
 %% BELUGA Setup
@@ -31,17 +35,19 @@ NUM_CORE = configuration.num_cores;
 % Add NA library to our path so that we can use it
 addpath(genpath(NEUROALGO_PATH));
 
-% Disable this feature
-distcomp.feature( 'LocalUseMpiexec', false ) % This was because of some bug happening in the cluster
+% Disable this feature (CHECK IF NEEDED)
+if IS_CLUSTER == 1
+    distcomp.feature( 'LocalUseMpiexec', false ) % This was because of some bug happening in the cluster
 
-% Create a "local" cluster object
-local_cluster = parcluster('local');
+    % Create a "local" cluster object
+    local_cluster = parcluster('local');
 
-% Modify the JobStorageLocation to $SLURM_TMPDIR
-pc.JobStorageLocation = strcat('/scratch/YourUsername/', getenv('SLURM_JOB_ID'));
+    % Modify the JobStorageLocation to $SLURM_TMPDIR
+    pc.JobStorageLocation = strcat('/scratch/YourUsername/', getenv('SLURM_JOB_ID'));
 
-% Start the parallel pool
-parpool(local_cluster, NUM_CORE)
+    % Start the parallel pool
+    parpool(local_cluster, NUM_CORE)
+end
 
 %% Experiment Variable
 % Path 
@@ -61,25 +67,7 @@ bandpass_names = {'delta','theta', 'alpha', 'beta'};
 bandpass_freqs = {[1 4], [4 8], [8 13], [13 30]};
 
 % This will be the same throughout the features
-WIN_SIZE = 10;
-STEP_SIZE = 10;
-
-% Spectrogram Params
-time_bandwith_product = 2;
-number_tapers = 3;
-
-% wPLI & dPLI Params
-number_surrogate = 20; % Number of surrogate wPLI to create
-p_value = 0.05; % the p value to make our test on
-
-% Permutation Entropy Params
-embedding_dimension = 5;
-time_lag = 4;
-
-% Hub Location (HL)
-threshold = 0.10; % This is the threshold at which we binarize the graph
-a_degree = 1.0;
-a_bc = 0.0;
+features_params = configuration.features_params;
 
 data = load(FULL_HEADSET_LOCATION);
 max_location = data.max_location;
@@ -98,6 +86,8 @@ parfor id = 3:length(directories)
     if(ismember(folder.name, rejected_participants))
         continue 
     end
+    
+    
 
     out_file_participant = sprintf(OUT_FILE,folder.name);
     write_header(out_file_participant, header, bandpass_names, max_location)
@@ -137,6 +127,30 @@ parfor id = 3:length(directories)
         recording = recordings{l_i};
         label = labels{l_i};
         
+        % THIS IS THE FEATURE CALCULATION REGIONS THAT NEED TO BE MOVED
+        % AWAY
+        %% Parameters unpacking
+        % General
+        win_size = features_params.general.win_size;
+        step_size = features_params.general.step_size;
+        
+        % Power
+        time_bandwith_product = features_params.power.time_bandwith_product;
+        number_tapers = features_params.power.number_tapers;
+        
+        % wPLI & dPLI Params
+        number_surrogate = features_params.pli.number_surrogate; % Number of surrogate wPLI to create
+        p_value = features_params.pli.p_value; % the p value to make our test on
+
+        % Permutation Entropy Params
+        embedding_dimension = features_params.pe.embedding_dimension;
+        time_lag = features_params.pe.time_lag;
+
+        % Hub Location (HL)
+        threshold = features_params.hub_location.threshold; % This is the threshold at which we binarize the graph
+        a_degree = features_params.hub_location.a_degree;
+        a_bc = features_params.hub_location.a_bc;
+        
         features = [];
         for b_i = 1:length(bandpass_freqs)
             bandpass = bandpass_freqs{b_i};
@@ -144,23 +158,23 @@ parfor id = 3:length(directories)
             fprintf("Calculating Feature at %s\n",name);
 
             % Power per channels
-            [pad_powers] = calculate_power(recording, WIN_SIZE, STEP_SIZE, bandpass, max_location);
+            [pad_powers] = calculate_power(recording, win_size, step_size, bandpass, max_location);
             
             % Peak Frequency
-            result_sp = na_spectral_power(recording, WIN_SIZE, time_bandwith_product, number_tapers, bandpass, STEP_SIZE);
+            result_sp = na_spectral_power(recording, win_size, time_bandwith_product, number_tapers, bandpass, step_size);
             peak_frequency = result_sp.data.peak_frequency';
             
             % wPLI
-            [pad_avg_wpli] = calculate_wpli(recording, bandpass, WIN_SIZE, STEP_SIZE, number_surrogate, p_value, max_location);
+            [pad_avg_wpli] = calculate_wpli(recording, bandpass, win_size, step_size, number_surrogate, p_value, max_location);
             
             % dPLI
-            [pad_avg_dpli] = calculate_dpli(recording, bandpass, WIN_SIZE, STEP_SIZE, number_surrogate, p_value, max_location);
+            [pad_avg_dpli] = calculate_dpli(recording, bandpass, win_size, step_size, number_surrogate, p_value, max_location);
 
             % PE
-            [pad_pe] = calculate_pe(recording, WIN_SIZE, STEP_SIZE, bandpass, embedding_dimension, time_lag, max_location)
+            [pad_pe] = calculate_pe(recording, win_size, step_size, bandpass, embedding_dimension, time_lag, max_location)
             
             % HL
-            [pad_hl] = calculate_hl(recording, WIN_SIZE, STEP_SIZE, bandpass, number_surrogate, p_value, threshold, a_degree, a_bc, max_location)
+            [pad_hl] = calculate_hl(recording, win_size, step_size, bandpass, number_surrogate, p_value, threshold, a_degree, a_bc, max_location)
                        
             features = horzcat(features, pad_powers, peak_frequency, pad_avg_wpli, pad_avg_dpli, pad_pe, pad_hl);
         end
@@ -198,6 +212,12 @@ for id = 3:length(directories)
     end
 
     delete(out_file_participant);
+end
+
+
+function [features] = calculate_features()
+% CALCULATE FEATURES: iterate over a recording to calculate the features 
+% given the analysis parameters
 end
 
 function write_header(OUT_FILE, header, bandpass_names, max_location)
