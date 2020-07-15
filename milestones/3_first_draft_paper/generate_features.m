@@ -22,7 +22,7 @@
 % for all the participants
 
 
-REPO_LOCATION = '/lustre03/project/6010672/yacine08/eeg-pain-detection';
+REPO_LOCATION = '/lustre03/project/6010672/yacine08/eeg-pain-detection/milestones/3_first_draft_paper';
 addpath(genpath(REPO_LOCATION)); % need to add the repo to path because matlab is dumb
 
 CONFIG_FILENAME = 'beluga_configuration.json';
