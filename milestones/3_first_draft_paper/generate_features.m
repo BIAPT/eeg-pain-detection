@@ -21,6 +21,10 @@
 %
 % for all the participants
 
+
+REPO_LOCATION = '/lustre03/project/6010672/yacine08/eeg-pain-detection/milestones/3_first_draft_paper';
+addpath(genpath(REPO_LOCATION)); % need to add the repo to path because matlab is dumb
+
 CONFIG_FILENAME = 'beluga_configuration.json';
 configuration = jsondecode(fileread(CONFIG_FILENAME));
 
@@ -308,14 +312,24 @@ function write_feature_vector(file_id, max_location, bandpass_name, feature_type
     end
 end
 
-function [state] = is_valid_state(filename, states)
+function [state_id] = is_valid_state(filename, states)
+% IS VALID STATE: Check if the filename contains data from a valid state
+%
+%   Input:
+%   filename = the name of the file we would want to load from
+%   states = an cell array of string containing permitted state (see
+%   configuration.json files for information)
+%
+%   Output:
+%   state_id = the index of the states, again see the configuration for the
+%   name that correspond to the id (start at 1 not 0 because its matlab)
     for s = 1:length(states)
        state = states{s};
        if(contains(filename, state))
-           state = s;
+           state_id = s;
            return
        end
     end
     
-    state = 0;
+    state_id = 0;
 end
