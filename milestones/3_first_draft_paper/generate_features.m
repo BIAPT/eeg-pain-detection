@@ -21,7 +21,7 @@
 %
 % for all the participants
 
-CONFIG_FILENAME = 'yacine_configuration.json';
+CONFIG_FILENAME = 'beluga_configuration.json';
 configuration = jsondecode(fileread(CONFIG_FILENAME));
 
 %% BELUGA Setup
@@ -51,13 +51,6 @@ IN_DIR = configuration.in_dir;
 FULL_HEADSET_LOCATION = configuration.full_headset_location;
 OUT_FILE = strcat(configuration.out_dir, "features_%s.csv");
 
-% Global Experiment Variable
-rejected_participants = {
-    'HE014','HE007', 'ME019', ...
-    'ME034','ME040','ME042', 'ME046', 'ME048', 'ME050', 'ME052', 'ME053', ...
-    'ME056', 'ME059', 'ME065'
-    };
-
 header = ["id", "type", "state"];
 bandpass_names = {'delta','theta', 'alpha', 'beta'};
 bandpass_freqs = {[1 4], [4 8], [8 13], [13 30]};
@@ -78,11 +71,7 @@ parfor id = 3:length(directories)
     folder = directories(id);
     disp(folder.name);
             
-    % We skip participants that are problematic
-    if(ismember(folder.name, rejected_participants))
-        continue 
-    end
-    
+ 
     out_file_participant = sprintf(OUT_FILE,folder.name);
     write_header(out_file_participant, header, bandpass_names, max_location)
     
@@ -90,31 +79,8 @@ parfor id = 3:length(directories)
     p_id = str2num(extractAfter(folder.name,"E"));
     is_healthy = contains(folder.name, 'HE');
     participant_path = strcat(folder.folder,filesep,folder.name);
-    
-    baseline_name = sprintf('%s_nopain.set',folder.name);
-    hot_pain_name = sprintf('%s_hot1.set',folder.name);
-    
-    % load baseline recording, if nopain doesn't exist  will load rest
-    % instead
-    try
-        baseline_recording = load_set(baseline_name, participant_path);
-    catch
-        baseline_name = sprintf('%s_rest.set',folder.name);
-        baseline_recording = load_set(baseline_name, participant_path);
-    end
-    
-    
-    % If there is a problem here it means that there is a datapoint missing
-    % Most problematic participant have been added to the rejected
-    % participants list
-    try
-        hot_pain_recording = load_set(hot_pain_name, participant_path);
-    catch
-        printf("Should remove participant %s", hot_pain_name);
-        continue;
-    end    
+     
 
-    
     %% Iterate through the files within the participant folder
     files = dir(participant_path);
     for f_id = 3:length(files)
@@ -156,12 +122,6 @@ OUT_FILE_ALL = sprintf(OUT_FILE, "all");
 write_header(OUT_FILE_ALL, header, bandpass_names, max_location)
 for id = 3:length(directories)
     folder = directories(id);
-    
-    % We skip participants that are problematic
-    % Here we should test it without skipping participant
-    if(ismember(folder.name, rejected_participants))
-        continue 
-    end
     
     disp(folder.name);
     out_file_participant = sprintf(OUT_FILE,folder.name);
