@@ -85,8 +85,6 @@ parfor id = 3:length(directories)
         continue 
     end
     
-    
-
     out_file_participant = sprintf(OUT_FILE,folder.name);
     write_header(out_file_participant, header, bandpass_names, max_location)
     
@@ -127,55 +125,7 @@ parfor id = 3:length(directories)
         
         % THIS IS THE FEATURE CALCULATION REGIONS THAT NEED TO BE MOVED
         % AWAY
-        %% Parameters unpacking
-        % General
-        win_size = features_params.general.win_size;
-        step_size = features_params.general.step_size;
-        
-        % Power
-        time_bandwith_product = features_params.power.time_bandwith_product;
-        number_tapers = features_params.power.number_tapers;
-        
-        % wPLI & dPLI Params
-        number_surrogate = features_params.pli.number_surrogate; % Number of surrogate wPLI to create
-        p_value = features_params.pli.p_value; % the p value to make our test on
-
-        % Permutation Entropy Params
-        embedding_dimension = features_params.pe.embedding_dimension;
-        time_lag = features_params.pe.time_lag;
-
-        % Hub Location (HL)
-        threshold = features_params.hub_location.threshold; % This is the threshold at which we binarize the graph
-        a_degree = features_params.hub_location.a_degree;
-        a_bc = features_params.hub_location.a_bc;
-        
-        features = [];
-        for b_i = 1:length(bandpass_freqs)
-            bandpass = bandpass_freqs{b_i};
-            name = bandpass_names{b_i};
-            fprintf("Calculating Feature at %s\n",name);
-
-            % Power per channels
-            [pad_powers] = calculate_power(recording, win_size, step_size, bandpass, max_location);
-            
-            % Peak Frequency
-            result_sp = na_spectral_power(recording, win_size, time_bandwith_product, number_tapers, bandpass, step_size);
-            peak_frequency = result_sp.data.peak_frequency';
-            
-            % wPLI
-            [pad_avg_wpli] = calculate_wpli(recording, bandpass, win_size, step_size, number_surrogate, p_value, max_location);
-            
-            % dPLI
-            [pad_avg_dpli] = calculate_dpli(recording, bandpass, win_size, step_size, number_surrogate, p_value, max_location);
-
-            % PE
-            [pad_pe] = calculate_pe(recording, win_size, step_size, bandpass, embedding_dimension, time_lag, max_location)
-            
-            % HL
-            [pad_hl] = calculate_hl(recording, win_size, step_size, bandpass, number_surrogate, p_value, threshold, a_degree, a_bc, max_location)
-                       
-            features = horzcat(features, pad_powers, peak_frequency, pad_avg_wpli, pad_avg_dpli, pad_pe, pad_hl);
-        end
+        [features] = calculate_features(recording, features_params, bandpass_freqs, bandpass_names, max_location)
         
          %% Write the features to file
         [num_window, ~] = size(features);
@@ -213,9 +163,60 @@ for id = 3:length(directories)
 end
 
 
-function [features] = calculate_features()
+function [features] = calculate_features(recording, features_params, bandpass_freqs, bandpass_names, max_location)
 % CALCULATE FEATURES: iterate over a recording to calculate the features 
 % given the analysis parameters
+
+
+    %% Parameters unpacking
+    % General
+    win_size = features_params.general.win_size;
+    step_size = features_params.general.step_size;
+
+    % Power
+    time_bandwith_product = features_params.power.time_bandwith_product;
+    number_tapers = features_params.power.number_tapers;
+
+    % wPLI & dPLI Params
+    number_surrogate = features_params.pli.number_surrogate; % Number of surrogate wPLI to create
+    p_value = features_params.pli.p_value; % the p value to make our test on
+
+    % Permutation Entropy Params
+    embedding_dimension = features_params.pe.embedding_dimension;
+    time_lag = features_params.pe.time_lag;
+
+    % Hub Location (HL)
+    threshold = features_params.hub_location.threshold; % This is the threshold at which we binarize the graph
+    a_degree = features_params.hub_location.a_degree;
+    a_bc = features_params.hub_location.a_bc;
+
+    features = [];
+    for b_i = 1:length(bandpass_freqs)
+        bandpass = bandpass_freqs{b_i};
+        name = bandpass_names{b_i};
+        fprintf("Calculating Feature at %s\n",name);
+
+        % Power per channels
+        [pad_powers] = calculate_power(recording, win_size, step_size, bandpass, max_location);
+
+        % Peak Frequency
+        result_sp = na_spectral_power(recording, win_size, time_bandwith_product, number_tapers, bandpass, step_size);
+        peak_frequency = result_sp.data.peak_frequency';
+
+        % wPLI
+        [pad_avg_wpli] = calculate_wpli(recording, bandpass, win_size, step_size, number_surrogate, p_value, max_location);
+
+        % dPLI
+        [pad_avg_dpli] = calculate_dpli(recording, bandpass, win_size, step_size, number_surrogate, p_value, max_location);
+
+        % PE
+        [pad_pe] = calculate_pe(recording, win_size, step_size, bandpass, embedding_dimension, time_lag, max_location);
+
+        % HL
+        [pad_hl] = calculate_hl(recording, win_size, step_size, bandpass, number_surrogate, p_value, threshold, a_degree, a_bc, max_location);
+
+        features = horzcat(features, pad_powers, peak_frequency, pad_avg_wpli, pad_avg_dpli, pad_pe, pad_hl);
+    end
 end
 
 function write_header(OUT_FILE, header, bandpass_names, max_location)
