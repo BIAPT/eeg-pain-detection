@@ -111,7 +111,7 @@ parfor id = 3:length(directories)
        catch
           disp(strcat("Problem with file: ", filename))
           file_id = fopen(OUT_LOG,'a');
-          fpritnf(file_id, strcat("Problem with file: ", filename));
+          fprintf(file_id, strcat("Problem with file: ", filename));
           fclose(file_id);
           continue;
        end
