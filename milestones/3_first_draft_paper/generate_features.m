@@ -97,19 +97,18 @@ parfor id = 3:length(directories)
            continue
        end
        
+       %% Load data and calculate feature
        % We need to try/catch the loading of the set file because something
        % there is a problematic file
+       disp(filename)
        try 
             recording = load_set(filename, participant_path);
+            [features] = calculate_features(recording, features_params, bandpass_freqs, bandpass_names, max_location);
        catch
-            disp(strcat("Problem with file: ", filename));
-            continue;
+          disp(strcat("Problem with file: ", filename))
+          continue;
        end
        
-       %% Calculate Features
-       disp(filename)
-       [features] = calculate_features(recording, features_params, bandpass_freqs, bandpass_names, max_location);
-
        %% Write the features to file
        [num_window, ~] = size(features);
        for w = 1:num_window
