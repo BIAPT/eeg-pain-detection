@@ -4,6 +4,7 @@
     "in_dir": "/media/yacine/Data/pain_and_eeg/all_data",
     "full_headset_location": "/home/yacine/Documents/BIAPT/eeg-pain-detection/milestones/.data/full_headset_location.mat",
     "out_dir":"/home/yacine/Documents/BIAPT/eeg_pain_result/",
+    "is_cluster": 0,
     "features_params" : {
         "general":{
             "win_size": 10,

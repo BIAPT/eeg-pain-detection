@@ -4,6 +4,7 @@
     "in_dir": "/lustre03/project/6010672/yacine08/eeg_pain_data/",
     "full_headset_location": "/lustre03/project/6010672/yacine08/eeg-pain-detection/projects/.data/full_headset_location.mat",
     "out_dir":"/lustre03/project/6010672/yacine08/eeg_pain_result/",
+    "is_cluster": 1,
     "features_params" : {
         "general":{
             "win_size": 10,

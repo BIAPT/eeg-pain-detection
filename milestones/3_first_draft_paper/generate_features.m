@@ -24,8 +24,6 @@
 % for all the participants
 
 CONFIG_FILENAME = 'yacine_configuration.json';
-IS_CLUSTER = 0;
-
 configuration = jsondecode(fileread(CONFIG_FILENAME));
 
 %% BELUGA Setup
@@ -36,7 +34,7 @@ NUM_CORE = configuration.num_cores;
 addpath(genpath(NEUROALGO_PATH));
 
 % Disable this feature (CHECK IF NEEDED)
-if IS_CLUSTER == 1
+if configuration.is_cluster == 1
     distcomp.feature( 'LocalUseMpiexec', false ) % This was because of some bug happening in the cluster
 
     % Create a "local" cluster object
