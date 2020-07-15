@@ -16,8 +16,6 @@
 % at the following epochs (sometime these are not present for the pariticpant):
 % - baseline 
 % - first hot 
-%
-% TODO
 % - cold
 % - second hot
 %
@@ -60,7 +58,7 @@ rejected_participants = {
     'ME056', 'ME059', 'ME065'
     };
 
-header = ["id", "type", "is_hot"];
+header = ["id", "type", "state"];
 bandpass_names = {'delta','theta', 'alpha', 'beta'};
 bandpass_freqs = {[1 4], [4 8], [8 13], [13 30]};
 
@@ -116,25 +114,41 @@ parfor id = 3:length(directories)
         continue;
     end    
 
-    %% Calculate Features
-    recordings = { baseline_recording, hot_pain_recording };
-    labels = {0, 1};
-    for l_i = 1:length(recordings)
-        recording = recordings{l_i};
-        label = labels{l_i};
-        
-        % THIS IS THE FEATURE CALCULATION REGIONS THAT NEED TO BE MOVED
-        % AWAY
-        [features] = calculate_features(recording, features_params, bandpass_freqs, bandpass_names, max_location)
-        
-         %% Write the features to file
-        [num_window, ~] = size(features);
-        for w = 1:num_window
-            row = features(w,:);
-            dlmwrite(out_file_participant, [p_id, is_healthy, label, row], '-append');
-        end
-        
+    
+    %% Iterate through the files within the participant folder
+    files = dir(participant_path);
+    for f_id = 3:length(files)
+       filename = files(f_id).name;
+       state = is_valid_state(filename, configuration.states);
+       
+       % 0 in the state means its not a valid state
+       % valid state includes: nopain, rest, hot1, cold, hot2
+       if state == 0
+           continue
+       end
+       
+       % We need to try/catch the loading of the set file because something
+       % there is a problematic file
+       try 
+            recording = load_set(filename, participant_path);
+       catch
+            disp(strcat("Problem with file: ", filename));
+            continue;
+       end
+       
+       %% Calculate Features
+       disp(filename)
+       [features] = calculate_features(recording, features_params, bandpass_freqs, bandpass_names, max_location);
+
+       %% Write the features to file
+       [num_window, ~] = size(features);
+       for w = 1:num_window
+           row = features(w,:);
+           dlmwrite(out_file_participant, [p_id, is_healthy, state, row], '-append');
+       end
+       
     end
+    
 end
 
 % Concatenating all the files into a big table without parfor
@@ -144,6 +158,7 @@ for id = 3:length(directories)
     folder = directories(id);
     
     % We skip participants that are problematic
+    % Here we should test it without skipping participant
     if(ismember(folder.name, rejected_participants))
         continue 
     end
@@ -331,4 +346,16 @@ function write_feature_vector(file_id, max_location, bandpass_name, feature_type
         feature_label = sprintf("%s_%s_%s",channel_label, bandpass_name, feature_type);
         fprintf(file_id,'%s,', lower(feature_label)); 
     end
+end
+
+function [state] = is_valid_state(filename, states)
+    for s = 1:length(states)
+       state = states{s};
+       if(contains(filename, state))
+           state = s;
+           return
+       end
+    end
+    
+    state = 0;
 end

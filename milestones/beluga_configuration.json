@@ -27,5 +27,12 @@
             "a_degree": 1.0,
             "a_bc": 0.0
         }
-    }
+    },
+    "states": [
+        "nopain.set",
+        "rest.set",
+        "hot1.set",
+        "cold.set",
+        "hot2.set"
+    ]
 }
