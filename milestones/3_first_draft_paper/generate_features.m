@@ -25,7 +25,7 @@
 REPO_LOCATION = '/lustre03/project/6010672/yacine08/eeg-pain-detection';
 addpath(genpath(REPO_LOCATION)); % need to add the repo to path because matlab is dumb
 
-CONFIG_FILENAME = 'belu_configuration.json';
+CONFIG_FILENAME = 'beluga_configuration.json';
 configuration = jsondecode(fileread(CONFIG_FILENAME));
 
 %% BELUGA Setup
