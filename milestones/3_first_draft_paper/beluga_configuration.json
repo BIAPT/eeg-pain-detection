@@ -29,6 +29,7 @@
         }
     },
     "states": [
+        "covas.set",
         "nopain.set",
         "rest.set",
         "hot1.set",
