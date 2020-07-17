@@ -3,8 +3,19 @@ In this project, we are analyzing 24 channels dry EEG data coming from the Shrin
 
 Code written by Yacine Mahdid in 2020 from home during the Covid-19 pandemic.
 
+
+
 ## Table of Content
+- [Labels](#labels)
 - [Code Structure](#code-structure)
+
+## Labels
+- rest: is when the participant didn't move while we recorded the data. This was not a very good control since in the hot1/hot2 condition they are moving a cursor
+- nopain: is the same thing if a participant has it we need to change it to rest
+- covas: is when we told the participant to move the small cursor (this is the better control)
+- hot1: the first painful thermal condition
+- cold: the only cold bath condition
+- hot2: the second painful thermal condition after the cold bath
 
 ## Code Structure
 - .doc: where we keep some important documents that the analysis is based on
