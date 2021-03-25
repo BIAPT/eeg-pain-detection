@@ -77,7 +77,7 @@ PyNaCl==1.2.1
 pyparsing==2.3.1
 python-dateutil==2.7.5
 pytz==2018.9
-PyYAML==5.3.1
+PyYAML==5.4
 pyzmq==17.1.2
 requests==2.21.0
 scikit-learn==0.23.0
