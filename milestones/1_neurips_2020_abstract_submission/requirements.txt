@@ -58,7 +58,7 @@ notebook==5.7.4
 numpy==1.17.4
 pandas==0.25.3
 pandocfilters==1.4.2
-paramiko==2.4.2
+paramiko==2.10.1
 parso==0.3.1
 path.py==11.5.0
 pathlib2==2.3.3
