@@ -23,7 +23,7 @@ dask==2.17.0
 dask-jobqueue==0.7.1
 deap==1.2.2
 decorator==4.3.0
-distributed==2.17.0
+distributed==2021.10.0
 ecdsa==0.13
 entrypoints==0.2.3
 funcsigs==1.0.2
